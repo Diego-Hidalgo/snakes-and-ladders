@@ -80,5 +80,5 @@ public class Square {
     public Square getDown() {
         return down;
     }//End getDown
-    
+
 }//End Square class
