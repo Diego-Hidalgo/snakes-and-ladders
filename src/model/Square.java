@@ -80,5 +80,7 @@ public class Square {
     public Square getDown() {
         return down;
     }//End getDown
-
+    public String toString(){
+      return "[]";
+    }
 }//End Square class
