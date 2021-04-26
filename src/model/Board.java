@@ -41,18 +41,22 @@ public class Board {
       }//End if
     }//End addRows
     public String getEnumerateBoard(){
-      Square row = first;
-      for(int i = 0; i < rowsAmount;i++){
-        Square col = row;
-        while(col != null){
-          board += "["+col.getRow()+","+col.getColumn()+"]";
-          col = col.getNext();
-        }//End while
-        row = row.getDown();
-        board += "\n";
-      }//End for
+      getRows(first);
       return board;
     }//End getEnumerateBoard
+    public void getColumns(Square current){
+      if(current != null){
+        board += "["+current.getRow()+","+current.getColumn()+"]";
+        getColumns(current.getNext());
+      }//End if
+    }//End getColumns
+    public void getRows(Square current){
+      if(current != null){
+        getColumns(current);
+        board += "\n";
+        getRows(current.getDown());
+      }//End if
+    }//End getRows
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
