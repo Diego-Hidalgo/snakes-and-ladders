@@ -9,7 +9,7 @@ public class Board {
     private int columnsAmount;
     private int rowsAmount;
     public Board() {
-      first = new Square(0,0);
+      first = new Square(0,0,1);
       board = new String();
     }//End board
     public void createBoard(int row,int col){
@@ -20,7 +20,8 @@ public class Board {
     }//End createBoard
     private void addColumns(Square current){
       if(current.getColumn() < (columnsAmount-1)){
-        Square newCol = new Square(current.getRow(),(current.getColumn()+1));
+        int num = ((current.getRow()+1)%2==0)?(current.getSquareNumber()-1):(current.getSquareNumber()+1);
+        Square newCol = new Square(current.getRow(),(current.getColumn()+1),num);
         newCol.setPrev(current);
         current.setNext(newCol);
         if(current.getUp() != null && (current.getUp()).getNext() != null){
@@ -30,10 +31,11 @@ public class Board {
         }//End if
         addColumns(newCol);
       }//End if
-    }//End addColumns
+    }//End addColumnsRight
     private void addRows(Square current){
       if(current.getRow() < (rowsAmount - 1) ){
-        Square newRow = new Square((current.getRow()+1),current.getColumn());
+        int num = ((current.getRow()+1)%2!=0)?(2*columnsAmount)*((current.getRow()+2)/2):current.getSquareNumber()+1;
+        Square newRow = new Square((current.getRow()+1),current.getColumn(),num);
         newRow.setUp(current);
         current.setDown(newRow);
         addColumns(newRow);
@@ -46,7 +48,7 @@ public class Board {
     }//End getEnumerateBoard
     public void getColumns(Square current){
       if(current != null){
-        board += "["+current.getRow()+","+current.getColumn()+"]";
+        board += "["+current.getSquareNumber()+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns

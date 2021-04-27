@@ -6,15 +6,16 @@ public class Square {
     private int column;
     private String snake;
     private String ladder;
-
+    private int squareNumber;
     private Square next;
     private Square prev;
     private Square up;
     private Square down;
 
-    public Square(int row, int column) {
+    public Square(int row, int column,int squareNumber) {
         this.row = row;
         this.column = column;
+        this.squareNumber = squareNumber;
     }//End constructor
 
     public void setRow(int row) {
@@ -48,6 +49,14 @@ public class Square {
     public String getLadder() {
         return ladder;
     }//End getLadder
+
+    public void setSquareNumber(int n){
+      squareNumber = n;
+    }//End setSquareNumber
+
+    public int getSquareNumber(){
+      return squareNumber;
+    }//End getSquareNumber
 
     public void setNext(Square next) {
         this.next = next;
