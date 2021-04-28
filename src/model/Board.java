@@ -8,10 +8,9 @@ public class Board {
     private String board;
     private int columnsAmount;
     private int rowsAmount;
-
+    private String auxRow;
     public Board() {
       firstSquare = new Square(0,0,1);
-      board = new String();
     }//End board
 
     public void createBoard(int row,int col){
@@ -48,13 +47,15 @@ public class Board {
     }//End addRows
 
     public String getEnumerateBoard(){
+      board = new String();
+      auxRow = new String();
       getRows(firstSquare);
       return board;
     }//End getEnumerateBoard
 
     public void getColumns(Square current){
       if(current != null){
-        board += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+"]";
+        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns
@@ -62,7 +63,8 @@ public class Board {
     public void getRows(Square current){
       if(current != null){
         getColumns(current);
-        board += "\n";
+        board = auxRow+"\n"+board;
+        auxRow = new String();
         getRows(current.getDown());
       }//End if
     }//End getRows
