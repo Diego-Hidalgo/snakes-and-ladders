@@ -16,6 +16,11 @@ public class Menu {
     private final static int SHOW_POSITIONS = 2;
     private final static int EXIT = 3;
 
+    private final static String THROW_DICE_COMMAND = "";
+    private final static String NUM_COMMAND = "NUM";
+    private final static String SIMUL_COMMAND = "SIMUL";
+    private final static String MENU_COMMAND = "MENU";
+
     private Board board;
     
     public Menu() {
@@ -48,6 +53,7 @@ public class Menu {
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
             bw.write("\nPor favor revise los parámetros de juego.\n\n");
             bw.flush();
+            br.readLine();
         }//End try/catch
     }//End readParameters
 
@@ -58,7 +64,39 @@ public class Menu {
         } catch (NumberFormatException nfe) {
             board.receiveGameParameters(rows, columns, snakes, ladders, subPlayers);
         }//End try/catch
+        bw.write(board.getEnumeratedBoard() + "\n");
+        bw.flush();
+        readCommandOperation();
     }//End readParameters
+
+    public void readCommandOperation() throws IOException {
+        bw.write(": ");
+        bw.flush();
+        String command = br.readLine();
+        if(!command.equalsIgnoreCase("")) {
+            doCommandOperation(command.toUpperCase());
+            readCommandOperation();
+        }//End if
+    }//End readCommandOperation
+
+    public void doCommandOperation(String command) throws IOException {
+        switch(command) {
+            case THROW_DICE_COMMAND:
+                break;
+            case NUM_COMMAND:
+                br.readLine();
+                break;
+            case SIMUL_COMMAND:
+                br.readLine();
+                break;
+            case MENU_COMMAND:
+                startProgram();
+                break;
+            default:
+                bw.write("Comando no reconocido\n\n");
+                bw.flush();
+        }//End switch
+    }//End doCommandOperation
 
     public void showPositioningList() {
 
@@ -93,9 +131,10 @@ public class Menu {
         }//End try/catch
         if(option != 3) {
             startProgram();
-        }//End if
-        bw.close();
-        br.close();
+        } else if (option == 3) {
+            bw.close();
+            br.close();
+        }//End if/else
     }//End startProgram
 
 }//End Menu Class
