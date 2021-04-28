@@ -4,7 +4,7 @@ public class Player {
 
     private String name;
     private String symbol;
-    private int score;
+    private int movements;
     private Square position;
     //Players
     private Player next;
@@ -34,12 +34,12 @@ public class Player {
         return symbol;
     }//End getSymbol
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setMovements(int movements) {
+        this.movements = movements;
     }//End setScore
 
-    public int getScore() {
-        return score;
+    public int getMovements() {
+        return movements;
     }//End getScore
 
     public void setPrev(Player prev) {
