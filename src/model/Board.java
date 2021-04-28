@@ -39,14 +39,14 @@ public class Board {
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
 
-    public void createBoard(int row,int col){
+    public void createBoard(int row,int col) {
       columnsAmount = col;
       rowsAmount = row;
       addColumns(firstSquare);
       addRows(firstSquare);
     }//End createBoard
 
-    private void addColumns(Square current){
+    private void addColumns(Square current) {
       if(current.getColumn() < (columnsAmount-1)){
         int num = ((current.getRow()+1)%2==0)?(current.getSquareNumber()-1):(current.getSquareNumber()+1);
         Square newCol = new Square(current.getRow(),(current.getColumn()+1),num);
@@ -61,7 +61,7 @@ public class Board {
       }//End if
     }//End addColumnsRight
 
-    private void addRows(Square current){
+    private void addRows(Square current) {
       if(current.getRow() < (rowsAmount - 1) ){
         int num = ((current.getRow()+1)%2!=0)?(2*columnsAmount)*((current.getRow()+2)/2):current.getSquareNumber()+1;
         Square newRow = new Square((current.getRow()+1),current.getColumn(),num);
@@ -72,21 +72,21 @@ public class Board {
       }//End if
     }//End addRows
 
-    public String getEnumeratedBoard(){
+    public String getEnumeratedBoard() {
       board = new String();
       auxRow = new String();
       getRows(firstSquare);
       return board;
     }//End getEnumerateBoard
 
-    public void getColumns(Square current){
+    public void getColumns(Square current) {
       if(current != null){
         auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns
 
-    public void getRows(Square current){
+    public void getRows(Square current) {
       if(current != null){
         getColumns(current);
         board = auxRow+"\n"+board;
@@ -102,7 +102,7 @@ public class Board {
         }//End if
     }//End addAllPlayers
 
-    public void addPlayer(String symbol){
+    public void addPlayer(String symbol) {
       if(firstPlayer == null){
           firstPlayer = new Player(symbol,firstSquare);
           firstPlayer.setPrev(firstPlayer);
@@ -118,12 +118,12 @@ public class Board {
       }//End else
     }//End addPlayer
 
-    public void movePlayer(String symbol, int steps){
+    public void movePlayer(String symbol, int steps) {
       Player toMove = searchPlayer(symbol,firstPlayer);
       move(toMove,steps);
     }//End movePlayer
 
-    private void move(Player player,int steps){
+    private void move(Player player,int steps) {
       if(steps > 0){
         Square nextSquare = ((player.getPosition().getRow() + 1) % 2 != 0)?player.getPosition().getNext():player.getPosition().getPrev();
         Square currentSquare = player.getPosition();
@@ -143,18 +143,18 @@ public class Board {
       }//End if
     }//End move
 
-    public Player getPlayers(){
+    public Player getPlayers() {
       return firstPlayer;
     }//End getPlayers
 
-    public Player searchPlayer(String symbol,Player current){
+    public Player searchPlayer(String symbol,Player current) {
       if(current.getSymbol().equalsIgnoreCase(symbol))
         return current;
       else
         return searchPlayer(symbol,current.getNext());
     }//End searchPlayer
 
-    public void clearBoard(){
+    public void clearBoard() {
       board = new String();
     }//End clearBoard
 
