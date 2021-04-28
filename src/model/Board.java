@@ -13,9 +13,19 @@ public class Board {
 
     public Board() {
       firstSquare = new Square(0,0,1);
-    }//End board
+    }//End Constructor
+
+    public void setGameParameters(String gameParameters) {
+        this.gameParameters = gameParameters;
+    }//End setGameParameters
+
+    public String getGameParameters() {
+        return gameParameters;
+    }//End getGameParameters
 
     public void receiveGameParameters(int rows, int columns, int snakes, int ladders, String symbols) {
+        String params = rows + " " + columns + " " + snakes + " " + ladders + " " + symbols;
+        setGameParameters(params);
         createBoard(rows, columns);
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
@@ -23,6 +33,8 @@ public class Board {
     public void receiveGameParameters(int rows, int columns, int snakes, int ladders, int amountPlayers) {
         String availableSymbols = "*!OX%$#+&";
         String symbols = availableSymbols.substring(0, amountPlayers);
+        String params = rows + " " + columns + " " + snakes + " " + ladders + " " + symbols;
+        setGameParameters(params);
         createBoard(rows, columns);
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
