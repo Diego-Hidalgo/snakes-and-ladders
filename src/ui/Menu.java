@@ -73,7 +73,7 @@ public class Menu {
         bw.write(": ");
         bw.flush();
         String command = br.readLine();
-        if(!command.equalsIgnoreCase("")) {
+        if(!command.equalsIgnoreCase(MENU_COMMAND)) {
             doCommandOperation(command.toUpperCase());
             readCommandOperation();
         }//End if
@@ -90,10 +90,9 @@ public class Menu {
                 br.readLine();
                 break;
             case MENU_COMMAND:
-                startProgram();
                 break;
             default:
-                bw.write("Comando no reconocido\n\n");
+                bw.write("Comando no reconocido\n");
                 bw.flush();
         }//End switch
     }//End doCommandOperation
@@ -131,7 +130,7 @@ public class Menu {
         }//End try/catch
         if(option != 3) {
             startProgram();
-        } else if (option == 3) {
+        } else {
             bw.close();
             br.close();
         }//End if/else
