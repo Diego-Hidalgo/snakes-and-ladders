@@ -1,17 +1,21 @@
 package model;
 
 public class Player {
-    
+
     private String name;
     private String symbol;
     private int score;
+    private Square position;
+    //Players
+    private Player next;
+    private Player prev;
+    //Square partners data
+    private Player squareNextPartner;
+    private Player squarePrevPartner;
 
-    private Player parent;
-    private Player left;
-    private Player right;
-
-    public Player(String symbol) {
+    public Player(String symbol, Square position) {
         this.symbol = symbol;
+        this.position = position;
     }//End constructor
 
     public void setName(String name) {
@@ -38,28 +42,47 @@ public class Player {
         return score;
     }//End getScore
 
-    public void setParent(Player parent) {
-        this.parent = parent;
-    }//End setParent
-
-    public Player getParent() {
-        return parent;
-    }//End getParent
-
-    public void setLeft(Player left) {
-        this.left = left;
+    public void setPrev(Player prev) {
+        this.prev = prev;
     }//End setLeft
 
-    public Player getLeft() {
-        return left;
+    public Player getPrev() {
+        return prev;
     }//End getleft
 
-    public void setRight(Player right) {
-        this.right = right;
+    public void setNext(Player next) {
+        this.next = next;
     }//End setRight
 
-    public Player getRight() {
-        return right;
+    public Player getNext() {
+        return next;
     }//End getRight
 
+    public void setPosition(Square position){
+      this.position = position;
+    }//End setPosition
+
+    public Square getPosition(){
+      return position;
+    }//End getPosition
+
+    public void setSquareNextPartner(Player next){
+      squareNextPartner = next;
+    }//End setSquareNextPartner
+
+    public Player getSquareNextPartner(){
+      return squareNextPartner;
+    }//End setSquareNextPartner
+
+    public void setSquarePrevPartner(Player prev){
+      squarePrevPartner = prev;
+    }//End setSquareNextPartner
+
+    public Player getSquarePrevPartner(){
+      return squarePrevPartner;
+    }//End setSquareNextPartner
+
+    public String toString(){
+      return symbol;
+    }
 }//End Player class

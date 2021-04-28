@@ -6,6 +6,8 @@ public class Square {
     private int column;
     private String snake;
     private String ladder;
+    private String playerInSquare;
+    private Player currentPlayers;
     private int squareNumber;
     private Square next;
     private Square prev;
@@ -89,6 +91,56 @@ public class Square {
     public Square getDown() {
         return down;
     }//End getDown
+
+    public void addCurrentsPlayers(Player p){
+      if(currentPlayers == null){
+        currentPlayers = p;
+      }else{
+        addCurrentsPlayers(currentPlayers,p);
+      }
+    }//End addCurrentsPlayers
+
+    private void addCurrentsPlayers(Player current,Player toAdd){
+      if(current.getSquareNextPartner() == null){
+        current.setSquareNextPartner(toAdd);
+        toAdd.setSquarePrevPartner(current);
+      }else
+        addCurrentsPlayers(current.getSquareNextPartner(),toAdd);
+    }//End addCurrentsPlayers
+
+    public void removePlayer(Player toRemove){
+      if(currentPlayers == toRemove){
+        currentPlayers = currentPlayers.getSquareNextPartner();
+        if(currentPlayers != null){
+            currentPlayers.getSquarePrevPartner().setSquareNextPartner(null);
+        }
+      }else if(currentPlayers != null){
+          removePlayer(currentPlayers.getSquareNextPartner(),toRemove);
+      }
+    }//End removeCurrentPlayer
+
+    private void removePlayer(Player current, Player toRemove){
+      if(current != null){
+        if(current == toRemove){
+          current.getSquarePrevPartner().setSquareNextPartner(current.getSquareNextPartner());
+          current.getSquareNextPartner().setSquarePrevPartner(current.getSquarePrevPartner());
+          current.setSquareNextPartner(null);
+          current.setSquarePrevPartner(null);
+        }else
+          removePlayer(current.getSquareNextPartner(),toRemove);
+      }//End if
+    }//End removePlayer
+    public String getCurrentPlayers(){
+      playerInSquare = new String();
+      currentPlayers(currentPlayers);
+      return playerInSquare;
+    }//End getCurrentsPlayers
+    private void currentPlayers(Player current){
+      if(current != null){
+        playerInSquare += current.getSymbol();
+        currentPlayers(current.getSquareNextPartner());
+      }
+    }//End currentPlayers
     public String toString(){
       return "[]";
     }

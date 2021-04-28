@@ -3,21 +3,24 @@ import java.util.Scanner;
 
 public class Board {
 
-    private Player root;
-    private Square first;
+    private Player firstPlayer;
+    private Square firstSquare;
     private String board;
     private int columnsAmount;
     private int rowsAmount;
+
     public Board() {
-      first = new Square(0,0,1);
+      firstSquare = new Square(0,0,1);
       board = new String();
     }//End board
+
     public void createBoard(int row,int col){
       columnsAmount = col;
       rowsAmount = row;
-      addColumns(first);
-      addRows(first);
+      addColumns(firstSquare);
+      addRows(firstSquare);
     }//End createBoard
+
     private void addColumns(Square current){
       if(current.getColumn() < (columnsAmount-1)){
         int num = ((current.getRow()+1)%2==0)?(current.getSquareNumber()-1):(current.getSquareNumber()+1);
@@ -32,6 +35,7 @@ public class Board {
         addColumns(newCol);
       }//End if
     }//End addColumnsRight
+
     private void addRows(Square current){
       if(current.getRow() < (rowsAmount - 1) ){
         int num = ((current.getRow()+1)%2!=0)?(2*columnsAmount)*((current.getRow()+2)/2):current.getSquareNumber()+1;
@@ -42,16 +46,19 @@ public class Board {
         addRows(newRow);
       }//End if
     }//End addRows
+
     public String getEnumerateBoard(){
-      getRows(first);
+      getRows(firstSquare);
       return board;
     }//End getEnumerateBoard
+
     public void getColumns(Square current){
       if(current != null){
-        board += "["+current.getSquareNumber()+"]";
+        board += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns
+
     public void getRows(Square current){
       if(current != null){
         getColumns(current);
@@ -59,6 +66,63 @@ public class Board {
         getRows(current.getDown());
       }//End if
     }//End getRows
+
+    public void addPlayer(String symbol){
+      if(firstPlayer == null){
+          firstPlayer = new Player(symbol,firstSquare);
+          firstPlayer.setPrev(firstPlayer);
+          firstPlayer.setNext(firstPlayer);
+          firstSquare.addCurrentsPlayers(firstPlayer);
+      }else{
+        Player toAdd = new Player(symbol,firstSquare);
+        firstPlayer.getPrev().setNext(toAdd);
+        toAdd.setPrev(firstPlayer.getPrev());
+        firstPlayer.setPrev(toAdd);
+        toAdd.setNext(firstPlayer);
+        firstSquare.addCurrentsPlayers(toAdd);
+      }//End else
+    }//End addPlayer
+
+    public void movePlayer(String symbol,int steps){
+      Player toMove = searchPlayer(symbol,firstPlayer);
+      move(toMove,steps);
+    }//End movePlayer
+
+    private void move(Player player,int steps){
+      if(steps > 0){
+        Square nextSquare = ((player.getPosition().getRow() + 1) % 2 != 0)?player.getPosition().getNext():player.getPosition().getPrev();
+        Square currentSquare = player.getPosition();
+        if(nextSquare != null){
+          if( (player.getPosition().getRow() + 1) % 2 == 0){
+            player.setPosition(currentSquare.getPrev());
+          }else{
+            player.setPosition( currentSquare.getNext());
+          }//End else
+          nextSquare.addCurrentsPlayers(player);
+        }else{
+          currentSquare.getDown().addCurrentsPlayers(player);
+          player.setPosition( currentSquare.getDown());
+        } //End else
+        currentSquare.removePlayer(player);
+        move(player,(--steps));
+      }//End if
+    }//End move
+
+    public Player getPlayers(){
+      return firstPlayer;
+    }//End getPlayers
+
+    public Player searchPlayer(String symbol,Player current){
+      if(current.getSymbol().equalsIgnoreCase(symbol))
+        return current;
+      else
+        return searchPlayer(symbol,current.getNext());
+    }//End searchPlayer
+
+    public void clearBoard(){
+      board = new String();
+    }//End clearBoard
+
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
@@ -67,8 +131,63 @@ public class Board {
       s.nextLine();
       System.out.print("Columnas ");
       int m = s.nextInt();
-    //  b.createBoard(n,m);
       b.createBoard(n,m);
       System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.addPlayer("$");
+      b.addPlayer("#");
+      b.addPlayer("%");
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("#",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("%",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("#",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("#",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("%",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+      b.movePlayer("$",1);
+      b.clearBoard();
+      System.out.println(b.getEnumerateBoard());
+      System.out.println("\n");
+
     }//End main
 }//End Board
