@@ -130,18 +130,22 @@ public class Square {
           removePlayer(current.getSquareNextPartner(),toRemove);
       }//End if
     }//End removePlayer
+
     public String getCurrentPlayers(){
       playerInSquare = new String();
       currentPlayers(currentPlayers);
       return playerInSquare;
     }//End getCurrentsPlayers
+
     private void currentPlayers(Player current){
       if(current != null){
         playerInSquare += current.getSymbol();
         currentPlayers(current.getSquareNextPartner());
-      }
+      }//End if
     }//End currentPlayers
+
     public String toString(){
       return "[]";
     }
+
 }//End Square class

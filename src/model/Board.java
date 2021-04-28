@@ -9,9 +9,23 @@ public class Board {
     private int columnsAmount;
     private int rowsAmount;
     private String auxRow;
+    private String gameParameters;
+
     public Board() {
       firstSquare = new Square(0,0,1);
     }//End board
+
+    public void receiveGameParameters(int rows, int columns, int snakes, int ladders, String symbols) {
+        createBoard(rows, columns);
+        addAllPlayers(symbols, 0);
+    }//End receiveGameParameters
+
+    public void receiveGameParameters(int rows, int columns, int snakes, int ladders, int amountPlayers) {
+        String availableSymbols = "*!OX%$#+&";
+        String symbols = availableSymbols.substring(0, amountPlayers);
+        createBoard(rows, columns);
+        addAllPlayers(symbols, 0);
+    }//End receiveGameParameters
 
     public void createBoard(int row,int col){
       columnsAmount = col;
@@ -46,7 +60,7 @@ public class Board {
       }//End if
     }//End addRows
 
-    public String getEnumerateBoard(){
+    public String getEnumeratedBoard(){
       board = new String();
       auxRow = new String();
       getRows(firstSquare);
@@ -69,13 +83,20 @@ public class Board {
       }//End if
     }//End getRows
 
+    public void addAllPlayers(String symbols, int index) {
+        if(index < symbols.length()) {
+            addPlayer(String.valueOf(symbols.charAt(index)));
+            addAllPlayers(symbols, ++index);
+        }//End if
+    }//End addAllPlayers
+
     public void addPlayer(String symbol){
       if(firstPlayer == null){
           firstPlayer = new Player(symbol,firstSquare);
           firstPlayer.setPrev(firstPlayer);
           firstPlayer.setNext(firstPlayer);
           firstSquare.addCurrentsPlayers(firstPlayer);
-      }else{
+      } else{
         Player toAdd = new Player(symbol,firstSquare);
         firstPlayer.getPrev().setNext(toAdd);
         toAdd.setPrev(firstPlayer.getPrev());
@@ -85,7 +106,7 @@ public class Board {
       }//End else
     }//End addPlayer
 
-    public void movePlayer(String symbol,int steps){
+    public void movePlayer(String symbol, int steps){
       Player toMove = searchPlayer(symbol,firstPlayer);
       move(toMove,steps);
     }//End movePlayer
@@ -125,6 +146,7 @@ public class Board {
       board = new String();
     }//End clearBoard
 
+    /*
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
@@ -190,6 +212,7 @@ public class Board {
       b.clearBoard();
       System.out.println(b.getEnumerateBoard());
       System.out.println("\n");
-
     }//End main
-}//End Board
+     */
+
+}//End Board Class
