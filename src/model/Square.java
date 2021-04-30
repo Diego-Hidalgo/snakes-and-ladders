@@ -9,6 +9,13 @@ public class Square {
     private String playerInSquare;
     private Player currentPlayers;
     private int squareNumber;
+    //Snake
+    private Square snakeHead;
+    private Square snakeTail;
+    //Ladder
+    private Square ladderTop;
+    private Square ladderBot;
+    //Board
     private Square next;
     private Square prev;
     private Square up;
@@ -288,13 +295,45 @@ public class Square {
       }//End if
     }//End currentPlayers
 
+    public void setSnakeHead(Square head){
+      snakeHead = head;
+    }//End setSnakeHead
+
+    public void setSnakeTail(Square tail){
+      snakeTail = tail;
+    }//End setSnakeTail
+
+    public Square getSnakeHead(){
+      return snakeHead;
+    }//End getSnakeHead
+
+    public Square getSnakeTail(){
+      return snakeTail;
+    }//End getSnakeTail
+
+    public void setLadderTop(Square top){
+      ladderTop = top;
+    }//End setLadderTop
+
+    public void setLadderBot(Square bot){
+      ladderBot = bot;
+    }//End setLadderBot
+
+    public Square getLadderTop(){
+      return ladderTop;
+    }//End getLadderTop
+
+    public Square getLadderBot(){
+      return ladderBot;
+    }//End getLadderBop
+
     /**
      * puts the information of the Square object into a String.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the information of the Square contained in a Stirng. <br>
      */
     public String toString(){
-      return "[]";
+      return "["+squareNumber+"]";
     }//End toString
 
 }//End Square Class

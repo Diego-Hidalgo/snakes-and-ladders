@@ -1,18 +1,23 @@
 package model;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Board {
 
     private Player firstPlayer;
     private Square firstSquare;
     private String board;
+    private int maxOcupation;
+    private float currentOcupation;
     private int columnsAmount;
     private int rowsAmount;
     private String auxRow;
     private String gameParameters;
+    private Random selector;
 
     public Board() {
       firstSquare = new Square(0,0,1);
+      selector = new Random();
     }//End Constructor
 
     public void setGameParameters(String gameParameters) {
@@ -42,6 +47,7 @@ public class Board {
     public void createBoard(int row,int col) {
       columnsAmount = col;
       rowsAmount = row;
+      maxOcupation = (int) Math.floor(((row*col)-2)/2);
       addColumns(firstSquare);
       addRows(firstSquare);
     }//End createBoard
@@ -77,11 +83,13 @@ public class Board {
       auxRow = new String();
       getRows(firstSquare);
       return board;
-    }//End getEnumerateBoard
+    }//End getEnumeratedBoard
 
     public void getColumns(Square current) {
       if(current != null){
-        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+"]";
+        String snake = (current.getSnakeHead() != null)?current.getSnake():"";
+        String tail = (current.getSnakeTail() != null)?current.getSnake():"";
+        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns
@@ -154,11 +162,72 @@ public class Board {
         return searchPlayer(symbol,current.getNext());
     }//End searchPlayer
 
+    public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
+      char s = 65;
+      generateSnakes(snakesAmount,s);
+    //  generateLadders(laddersAmount,1);
+    }//End generateSnakesAndLadders
+
+    public void generateSnakes(int snakesAmount, char symbol){
+      if(snakesAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
+        int squareHeadNumber = generateHeadSquare();
+        Square head = setSnakeHead(firstSquare.getDown(),symbol,squareHeadNumber);
+        if(head != null)
+            setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+        else
+          System.out.println("Pues fue nulo");
+          generateSnakes((--snakesAmount),(++symbol));
+      }//End if
+    }//End generateSnakes
+    private int generateHeadSquare(){
+      return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
+    }//End generateHeadSquare
+    private int generateTailSquare(int squareHeadNumber){
+      int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
+      n = ((n-1)*columnsAmount);
+      int s = selector.nextInt(n) + 1;
+      return s;
+    }//End generateTailSquare
+
+    public Square setSnakeHead(Square current,char symbol,int goal){
+      if( current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null && current.getSnakeTail() == null){
+        current.setSnake(String.valueOf(symbol));
+        currentOcupation += 0.5;
+        return current;
+      }else if( current != null && current.getSquareNumber() == goal && (current.getSnakeHead() != null || current.getSnakeTail() != null) ){
+        return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
+      }else if(current != null && currentOcupation < maxOcupation){
+        Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getNext():current.getPrev();
+        next = (next == null)?current.getDown():next;
+        return setSnakeHead(next,symbol,goal);
+      }else
+          return current;
+    }//End setSnake
+
+    public void setSnakeTail(Square current,char symbol, int goal,Square head){
+      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null && current.getSnakeTail() == null && current != null){
+        current.setSnake(String.valueOf(symbol));
+        current.setSnakeHead(head);
+        head.setSnakeTail(current);
+        currentOcupation += 0.5;
+      }else if( current != null &&  current.getSquareNumber() == goal && (current.getSnakeHead() != null || current.getSnakeTail() != null) ){
+        setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+      }else if(current != null && currentOcupation < maxOcupation){
+        Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
+        next = (next == null)?current.getDown():next;
+        setSnakeTail(next,symbol,goal,head);
+      }
+    }//End setSnake
+
+    public void generateLadders(int laddrsAmount){
+
+    }//End generateLadders
+
     public void clearBoard() {
       board = new String();
     }//End clearBoard
 
-    /*
+
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
@@ -168,63 +237,65 @@ public class Board {
       System.out.print("Columnas ");
       int m = s.nextInt();
       b.createBoard(n,m);
-      System.out.println(b.getEnumerateBoard());
-      System.out.println("\n");
+      System.out.print("Serpientes ");
+      s.nextLine();
+      int c = s.nextInt();
+      b.generateSnakesAndLadders(c,1);
+      System.out.println(b.getEnumeratedBoard());
+    /*  System.out.println("\n");
       b.addPlayer("$");
       b.addPlayer("#");
       b.addPlayer("%");
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("#",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("%",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("#",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("#",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("%",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
+      System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       b.movePlayer("$",1);
       b.clearBoard();
-      System.out.println(b.getEnumerateBoard());
-      System.out.println("\n");
+      System.out.println(b.getEnumeratedBoard());
+      System.out.println("\n");*/
     }//End main
-     */
-
 }//End Board Class
