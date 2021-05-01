@@ -22,7 +22,7 @@ public class Menu {
     private final static String MENU_COMMAND = "MENU";
 
     private Board board;
-    
+
     public Menu() {
         br = new BufferedReader(new InputStreamReader(System.in));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -30,7 +30,7 @@ public class Menu {
     }//End constructor
 
     public void showMainMenu() throws IOException {
-        bw.write("¿Qué desea hacer?\n" + "[1] Jugar\n" + "[2] Ver lista de puntuaciones\n" + "[3] Salir\n" + "Opcion: ");
+        bw.write("\n¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
         bw.flush();
     }//End showMenu
 

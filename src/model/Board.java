@@ -89,7 +89,9 @@ public class Board {
       if(current != null){
         String snake = (current.getSnakeHead() != null)?current.getSnake():"";
         String tail = (current.getSnakeTail() != null)?current.getSnake():"";
-        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+"]";
+        String top = (current.getLadderTop() != null)?current.getLadder():"";
+        String bot = (current.getLadderBot() != null)?current.getLadder():"";
+        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+top+bot+"]";
         getColumns(current.getNext());
       }//End if
     }//End getColumns
@@ -126,10 +128,18 @@ public class Board {
       }//End else
     }//End addPlayer
 
-    public void movePlayer(String symbol, int steps) {
+    public boolean movePlayer(String symbol, int steps) {
       Player toMove = searchPlayer(symbol,firstPlayer);
       move(toMove,steps);
+      return checkPosition(toMove);
     }//End movePlayer
+
+    private boolean checkPosition(Player currentPlayer){
+      boolean check = false;
+      if( currentPlayer.getPosition().getSquareNumber() == (columnsAmount*rowsAmount) )
+        check = true;
+      return check;
+    }//End checkPosition
 
     private void move(Player player,int steps) {
       if(steps > 0){
@@ -142,11 +152,13 @@ public class Board {
             player.setPosition( currentSquare.getNext());
           }//End else
           nextSquare.addCurrentsPlayers(player);
-        }else{
+          currentSquare.removePlayer(player);
+        }else if( currentSquare.getDown() != null ){
           currentSquare.getDown().addCurrentsPlayers(player);
           player.setPosition( currentSquare.getDown());
+          currentSquare.removePlayer(player);
         } //End else
-        currentSquare.removePlayer(player);
+        //currentSquare.removePlayer(player);
         move(player,(--steps));
       }//End if
     }//End move
@@ -165,7 +177,7 @@ public class Board {
     public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
       char s = 65;
       generateSnakes(snakesAmount,s);
-    //  generateLadders(laddersAmount,1);
+      generateLadders(laddersAmount,1);
     }//End generateSnakesAndLadders
 
     public void generateSnakes(int snakesAmount, char symbol){
@@ -174,9 +186,7 @@ public class Board {
         Square head = setSnakeHead(firstSquare.getDown(),symbol,squareHeadNumber);
         if(head != null)
             setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
-        else
-          System.out.println("Pues fue nulo");
-          generateSnakes((--snakesAmount),(++symbol));
+        generateSnakes((--snakesAmount),(++symbol));
       }//End if
     }//End generateSnakes
     private int generateHeadSquare(){
@@ -190,11 +200,14 @@ public class Board {
     }//End generateTailSquare
 
     public Square setSnakeHead(Square current,char symbol,int goal){
-      if( current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null && current.getSnakeTail() == null){
+      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
         current.setSnake(String.valueOf(symbol));
         currentOcupation += 0.5;
         return current;
-      }else if( current != null && current.getSquareNumber() == goal && (current.getSnakeHead() != null || current.getSnakeTail() != null) ){
+      }else if( current != null &&  current.getSquareNumber() == goal &&
+      (current.getSnakeHead() != null || current.getSnakeTail() != null ||
+       current.getLadderTop() != null || current.getLadderBot() != null) ){
         return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getNext():current.getPrev();
@@ -205,12 +218,15 @@ public class Board {
     }//End setSnake
 
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
-      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null && current.getSnakeTail() == null && current != null){
+      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null ){
         current.setSnake(String.valueOf(symbol));
         current.setSnakeHead(head);
         head.setSnakeTail(current);
         currentOcupation += 0.5;
-      }else if( current != null &&  current.getSquareNumber() == goal && (current.getSnakeHead() != null || current.getSnakeTail() != null) ){
+      }else if( current != null &&  current.getSquareNumber() == goal &&
+      (current.getSnakeHead() != null || current.getSnakeTail() != null ||
+       current.getLadderTop() != null || current.getLadderBot() != null) ){
         setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
@@ -219,10 +235,52 @@ public class Board {
       }
     }//End setSnake
 
-    public void generateLadders(int laddrsAmount){
-
+    public void generateLadders(int laddersAmount, int symbol){
+      if(laddersAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
+        int squareTopNumber = generateHeadSquare();
+        Square head = setLadderTop(firstSquare.getDown(),symbol,squareTopNumber);
+        if(head != null)
+            setLadderBot(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+        generateLadders((--laddersAmount),(++symbol));
+      }//End if
     }//End generateLadders
 
+    public Square setLadderTop(Square current,int symbol,int goal){
+      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal
+      && current.getSnakeHead() == null && current.getLadderTop() == null
+      && current.getLadderBot() == null && current.getSnakeTail() == null){
+        current.setLadder(String.valueOf(symbol));
+        currentOcupation += 0.5;
+        return current;
+      }else if( current != null &&  current.getSquareNumber() == goal &&
+       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
+        current.getLadderTop() != null || current.getLadderBot() != null) ){
+        return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
+      }else if(current != null && currentOcupation < maxOcupation){
+        Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getNext():current.getPrev();
+        next = (next == null)?current.getDown():next;
+        return setLadderTop(next,symbol,goal);
+      }else
+          return current;
+    }//End setLadderTop
+
+    public void setLadderBot(Square current,int symbol, int goal,Square head){
+      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
+        current.setLadder(String.valueOf(symbol));
+        current.setLadderTop(head);
+        head.setLadderBot(current);
+        currentOcupation += 0.5;
+      }else if( current != null &&  current.getSquareNumber() == goal &&
+       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
+        current.getLadderTop() != null || current.getLadderBot() != null) ){
+        setLadderBot(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+      }else if(current != null && currentOcupation < maxOcupation){
+        Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
+        next = (next == null)?current.getDown():next;
+        setLadderBot(next,symbol,goal,head);
+      }
+    }//End setLadderBot
     public void clearBoard() {
       board = new String();
     }//End clearBoard
@@ -231,6 +289,8 @@ public class Board {
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
+      boolean win = false;
+      String text = new String();
       System.out.print("Filas ");
       int n = s.nextInt();
       s.nextLine();
@@ -240,62 +300,77 @@ public class Board {
       System.out.print("Serpientes ");
       s.nextLine();
       int c = s.nextInt();
-      b.generateSnakesAndLadders(c,1);
+      System.out.print("Escaleras ");
+      s.nextLine();
+      int d = s.nextInt();
+      b.generateSnakesAndLadders(c,d);
       System.out.println(b.getEnumeratedBoard());
-    /*  System.out.println("\n");
+      System.out.println("\n");
       b.addPlayer("$");
       b.addPlayer("#");
       b.addPlayer("%");
-      b.clearBoard();
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("#",1);
-      b.clearBoard();
+      win = b.movePlayer("#",1);
+      if(win)
+        text = "Gano #";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("%",1);
-      b.clearBoard();
+      win = b.movePlayer("%",1);
+      if(win)
+        text = "Gano %";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("#",1);
-      b.clearBoard();
+      win = b.movePlayer("#",1);
+      if(win)
+        text = "Gano #";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("#",1);
-      b.clearBoard();
+      win = b.movePlayer("#",1);
+      if(win)
+        text = "Gano #";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("%",1);
-      b.clearBoard();
+      win = b.movePlayer("%",1);
+      if(win)
+        text = "Gano %";
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
-      b.movePlayer("$",1);
-      b.clearBoard();
+      win = b.movePlayer("$",1);
+      if(win)
+        text = "Gano $";
       System.out.println(b.getEnumeratedBoard());
-      System.out.println("\n");*/
+      System.out.println("\n");
+      System.out.println(text);
     }//End main
 }//End Board Class
