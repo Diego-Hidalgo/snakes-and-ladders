@@ -136,10 +136,28 @@ public class Board {
 
     private boolean checkPosition(Player currentPlayer){
       boolean check = false;
-      if( currentPlayer.getPosition().getSquareNumber() == (columnsAmount*rowsAmount) )
-        check = true;
+      if( currentPlayer.getPosition().getSquareNumber() == (columnsAmount*rowsAmount) ){
+          check = true;
+      }else if( currentPlayer.getPosition().getSnakeTail() != null ){
+          moveToSnakeTail(currentPlayer);
+      }else if( currentPlayer.getPosition().getLadderTop() != null ){
+          moveToLadderTop(currentPlayer);
+      }
       return check;
     }//End checkPosition
+    private void moveToSnakeTail(Player current){
+      Square currentSquare = current.getPosition();
+      current.setPosition(currentSquare.getSnakeTail());
+      current.getPosition().addCurrentsPlayers(current);
+      currentSquare.removePlayer(current);
+    }//End moveToSnakeTail
+
+    private void moveToLadderTop(Player current){
+      Square currentSquare = current.getPosition();
+      current.setPosition(currentSquare.getLadderTop());
+      current.getPosition().addCurrentsPlayers(current);
+      currentSquare.removePlayer(current);
+    }//End moveToLadderTop
 
     private void move(Player player,int steps) {
       if(steps > 0){
@@ -189,6 +207,7 @@ public class Board {
         generateSnakes((--snakesAmount),(++symbol));
       }//End if
     }//End generateSnakes
+
     private int generateHeadSquare(){
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
@@ -281,10 +300,6 @@ public class Board {
         setLadderBot(next,symbol,goal,head);
       }
     }//End setLadderBot
-    public void clearBoard() {
-      board = new String();
-    }//End clearBoard
-
 
     public static void main(String[] args){
       Board b = new Board();
@@ -372,5 +387,5 @@ public class Board {
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
       System.out.println(text);
-    }//End main
+    }//End main*/
 }//End Board Class
