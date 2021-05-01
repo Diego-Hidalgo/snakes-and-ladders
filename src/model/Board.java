@@ -81,27 +81,37 @@ public class Board {
     public String getEnumeratedBoard() {
       board = new String();
       auxRow = new String();
-      getRows(firstSquare);
+      getRows(firstSquare,false);
       return board;
     }//End getEnumeratedBoard
 
-    public void getColumns(Square current) {
+    public String getPlayableBoard(){
+      board = new String();
+      auxRow = new String();
+      getRows(firstSquare,true);
+      return board;
+    }//End getPlayableBoard
+
+    private void getColumns(Square current, boolean config) {
       if(current != null){
         String snake = (current.getSnakeHead() != null)?current.getSnake():"";
         String tail = (current.getSnakeTail() != null)?current.getSnake():"";
         String top = (current.getLadderTop() != null)?current.getLadder():"";
         String bot = (current.getLadderBot() != null)?current.getLadder():"";
-        auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+top+bot+"]";
-        getColumns(current.getNext());
+        if(config)
+          auxRow += "["+current.getCurrentPlayers()+snake+tail+top+bot+"]";
+        else
+          auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+top+bot+"]";
+        getColumns(current.getNext(),config);
       }//End if
     }//End getColumns
 
-    public void getRows(Square current) {
+    private void getRows(Square current, boolean config) {
       if(current != null){
-        getColumns(current);
+        getColumns(current,config);
         board = auxRow+"\n"+board;
         auxRow = new String();
-        getRows(current.getDown());
+        getRows(current.getDown(),config);
       }//End if
     }//End getRows
 
@@ -319,72 +329,72 @@ public class Board {
       s.nextLine();
       int d = s.nextInt();
       b.generateSnakesAndLadders(c,d);
-      System.out.println(b.getEnumeratedBoard());
-      System.out.println("\n");
       b.addPlayer("$");
       b.addPlayer("#");
       b.addPlayer("%");
       System.out.println(b.getEnumeratedBoard());
       System.out.println("\n");
+      System.out.println(b.getPlayableBoard());
+      System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("#",1);
       if(win)
         text = "Gano #";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("%",1);
       if(win)
         text = "Gano %";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("#",1);
       if(win)
         text = "Gano #";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("#",1);
       if(win)
         text = "Gano #";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("%",1);
       if(win)
         text = "Gano %";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       win = b.movePlayer("$",1);
       if(win)
         text = "Gano $";
-      System.out.println(b.getEnumeratedBoard());
+      System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       System.out.println(text);
     }//End main*/

@@ -245,7 +245,7 @@ public class Square {
       if(currentPlayers == toRemove){
         currentPlayers = currentPlayers.getSquareNextPartner();
         if(currentPlayers != null){
-            currentPlayers.getSquarePrevPartner().setSquareNextPartner(null);
+            toRemove.setSquareNextPartner(null);
         }
       }else if(currentPlayers != null){
           removePlayer(currentPlayers.getSquareNextPartner(),toRemove);
