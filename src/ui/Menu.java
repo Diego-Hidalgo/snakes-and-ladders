@@ -76,7 +76,9 @@ public class Menu {
         if(!command.equalsIgnoreCase(MENU_COMMAND)) {
             doCommandOperation(command.toUpperCase());
             readCommandOperation();
-        }//End if
+        } else {
+            board = new Board();
+        }//End if/else
     }//End readCommandOperation
 
     public void doCommandOperation(String command) throws IOException {
