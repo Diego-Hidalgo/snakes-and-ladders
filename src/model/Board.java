@@ -221,6 +221,7 @@ public class Board {
     private int generateHeadSquare(){
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
+    
     private int generateTailSquare(int squareHeadNumber){
       int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
       n = ((n-1)*columnsAmount);
