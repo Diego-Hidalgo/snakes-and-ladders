@@ -30,7 +30,7 @@ public class Menu {
     }//End constructor
 
     public void showMainMenu() throws IOException {
-        bw.write("\n¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
+        bw.write("¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
         bw.flush();
     }//End showMenu
 
@@ -43,6 +43,8 @@ public class Menu {
         bw.write("\nParámetros de juego: ");
         bw.flush();
         String params = br.readLine();
+        bw.write("\n");
+        bw.flush();
         try {
             int rows = Integer.parseInt(String.valueOf(params.charAt(0)));
             int columns = Integer.parseInt(String.valueOf(params.charAt(2)));
@@ -51,9 +53,8 @@ public class Menu {
             String subPlayers = params.substring(8);
             passParameters(rows, columns, snakes, ladders, subPlayers);
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
-            bw.write("\nPor favor revise los parámetros de juego.\n\n");
+            bw.write("Por favor revise los parámetros de juego.\n");
             bw.flush();
-            br.readLine();
         }//End try/catch
     }//End readParameters
 
@@ -64,32 +65,87 @@ public class Menu {
         } catch (NumberFormatException nfe) {
             board.receiveGameParameters(rows, columns, snakes, ladders, subPlayers);
         }//End try/catch
+        bw.write("--- JUEGO INICIADO ---\n");
         bw.write(board.getEnumeratedBoard() + "\n");
         bw.flush();
         readCommandOperation();
     }//End readParameters
 
     public void readCommandOperation() throws IOException {
-        bw.write(": ");
+        bw.write("Comando: ");
         bw.flush();
-        String command = br.readLine();
-        if(!command.equalsIgnoreCase(MENU_COMMAND)) {
-            doCommandOperation(command.toUpperCase());
+        String command = br.readLine().toUpperCase();
+        bw.write("\n");
+        bw.flush();
+        doCommandOperation(command);
+        if(!board.getGameStatus() && !command.equals(MENU_COMMAND)) {
             readCommandOperation();
-        }//End if
+        } else {
+            restart();
+        }//End if/else
     }//End readCommandOperation
+
+    public void restart() {
+        board = new Board();
+    }//End restart
+
+    public void play() throws IOException {
+        bw.write(board.throwDice() + "\n");
+        bw.write(board.getPlayableBoard());
+        bw.flush();
+        if(board.getGameStatus()) {
+            bw.write("--- JUEGO TERMINADO ---\n");
+            bw.write(board.getWinnerInfo());
+            bw.flush();
+            bw.write("Nickname: ");
+            String nickname = br.readLine();
+            board.addScore(nickname);
+            bw.write("\n");
+            bw.flush();
+        }//End if
+    }//End play
+
+    public void simulation() throws IOException {
+        Board simul = (Board) board.clone();
+        bw.write("--- SIMULACION INICIADA ---\n");
+        bw.flush();
+        simulation(simul);
+        bw.write(board.getPlayableBoard());
+        bw.flush();
+    }//End simulation
+
+    public void simulation(Board simul) throws IOException {
+        if(!simul.getGameStatus()) {
+            bw.write(simul.throwDice() + "\n");
+            bw.write(simul.getPlayableBoard());
+            bw.flush();
+            try {
+                Thread.sleep(2000);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            simulation(simul);
+        } else {
+            bw.write(simul.getWinnerInfo() + "\n");
+            bw.write("--- SIMULACION TERMINADA ---\n\n");
+            bw.flush();
+        }//End if/else
+    }//End simulation
 
     public void doCommandOperation(String command) throws IOException {
         switch(command) {
             case THROW_DICE_COMMAND:
+                play();
                 break;
             case NUM_COMMAND:
-                br.readLine();
+                bw.write("\n" + board.getEnumeratedBoard() + "\n");
+                bw.flush();
                 break;
             case SIMUL_COMMAND:
-                br.readLine();
+                simulation();
                 break;
             case MENU_COMMAND:
+                restart();
                 break;
             default:
                 bw.write("Comando no reconocido\n");
@@ -98,7 +154,7 @@ public class Menu {
     }//End doCommandOperation
 
     public void showPositioningList() {
-
+        //por hacer
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{

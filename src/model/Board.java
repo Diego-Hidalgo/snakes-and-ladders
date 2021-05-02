@@ -1,24 +1,45 @@
 package model;
-import java.util.Scanner;
+import com.rits.cloning.Cloner;
+//import java.util.Scanner;
 import java.util.Random;
 
 public class Board {
 
+    private final static String RED = "\033[31m";
+    private final static String BLUE ="\033[34m";
+    private final static String BOLD_FONT = "\033[0;1m";
+    private final static String RESET = "\u001B[0m";
+
+    private Score root;
     private Player firstPlayer;
+    private Player winner;
     private Square firstSquare;
     private String board;
     private int maxOcupation;
     private float currentOcupation;
     private int columnsAmount;
     private int rowsAmount;
+    private boolean gameStatus;
     private String auxRow;
     private String gameParameters;
-    private Random selector;
 
     public Board() {
       firstSquare = new Square(0,0,1);
-      selector = new Random();
+      gameStatus = false;
     }//End Constructor
+
+    public String getWinnerInfo() {
+        String info = "El jugador " + winner.getSymbol() + " ha ganado el juego con " + winner.getMovements() + " movimientos.";
+        return info;
+    }//End getWinnerinfo
+
+    public void setGameStatus(boolean gameStatus) {
+        this.gameStatus = gameStatus;
+    }//End setGameStatus
+
+    public boolean getGameStatus() {
+        return gameStatus;
+    }//End getGameStatus
 
     public void setGameParameters(String gameParameters) {
         this.gameParameters = gameParameters;
@@ -32,6 +53,7 @@ public class Board {
         String params = rows + " " + columns + " " + snakes + " " + ladders + " " + symbols;
         setGameParameters(params);
         createBoard(rows, columns);
+        generateSnakesAndLadders(snakes, ladders);
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
 
@@ -41,8 +63,19 @@ public class Board {
         String params = rows + " " + columns + " " + snakes + " " + ladders + " " + symbols;
         setGameParameters(params);
         createBoard(rows, columns);
+        generateSnakesAndLadders(snakes, ladders);
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
+
+    public String throwDice() {
+        Random r = new Random();
+        int steps = r.nextInt(6) + 1;
+        String info = "El jugador " + firstPlayer.getSymbol() + " ha lanzado el dado y obtuvo el puntaje " + steps;
+        setGameStatus(movePlayer(firstPlayer.getSymbol(), steps));
+        firstPlayer.setMovements(firstPlayer.getMovements() + steps);
+        firstPlayer = firstPlayer.getNext();
+        return info;
+    }//End throwDice
 
     public void createBoard(int row,int col) {
       columnsAmount = col;
@@ -94,14 +127,14 @@ public class Board {
 
     private void getColumns(Square current, boolean config) {
       if(current != null){
-        String snake = (current.getSnakeHead() != null)?current.getSnake():"";
-        String tail = (current.getSnakeTail() != null)?current.getSnake():"";
-        String top = (current.getLadderTop() != null)?current.getLadder():"";
-        String bot = (current.getLadderBot() != null)?current.getLadder():"";
+        String snake = (current.getSnakeHead() != null)?RED + current.getSnake():"";
+        String tail = (current.getSnakeTail() != null)?RED + current.getSnake():"";
+        String top = (current.getLadderTop() != null)?BLUE + current.getLadder():"";
+        String bot = (current.getLadderBot() != null)?BLUE + current.getLadder():"";
         if(config)
-          auxRow += "["+current.getCurrentPlayers()+snake+tail+top+bot+"]";
+          auxRow += RESET+"["+BOLD_FONT+current.getCurrentPlayers()+RESET+snake+tail+top+bot+RESET+"]";
         else
-          auxRow += "["+current.getSquareNumber()+" "+current.getCurrentPlayers()+snake+tail+top+bot+"]";
+          auxRow += RESET+"["+current.getSquareNumber()+" "+BOLD_FONT+current.getCurrentPlayers()+RESET+snake+tail+top+bot+RESET+"]";
         getColumns(current.getNext(),config);
       }//End if
     }//End getColumns
@@ -148,6 +181,7 @@ public class Board {
       boolean check = false;
       if( currentPlayer.getPosition().getSquareNumber() == (columnsAmount*rowsAmount) ){
           check = true;
+          winner = currentPlayer;
       }else if( currentPlayer.getPosition().getSnakeTail() != null ){
           moveToSnakeTail(currentPlayer);
       }else if( currentPlayer.getPosition().getLadderTop() != null ){
@@ -155,6 +189,7 @@ public class Board {
       }
       return check;
     }//End checkPosition
+
     private void moveToSnakeTail(Player current){
       Square currentSquare = current.getPosition();
       current.setPosition(currentSquare.getSnakeTail());
@@ -219,12 +254,14 @@ public class Board {
     }//End generateSnakes
 
     private int generateHeadSquare(){
+      Random selector = new Random();
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
     
     private int generateTailSquare(int squareHeadNumber){
       int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
       n = ((n-1)*columnsAmount);
+      Random selector = new Random();
       int s = selector.nextInt(n) + 1;
       return s;
     }//End generateTailSquare
@@ -301,7 +338,7 @@ public class Board {
         current.setLadderTop(head);
         head.setLadderBot(current);
         currentOcupation += 0.5;
-      }else if( current != null &&  current.getSquareNumber() == goal &&
+      }else if(current != null &&  current.getSquareNumber() == goal &&
        (current.getSnakeHead() != null || current.getSnakeTail() != null ||
         current.getLadderTop() != null || current.getLadderBot() != null) ){
         setLadderBot(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
@@ -312,6 +349,40 @@ public class Board {
       }
     }//End setLadderBot
 
+    public void addScore(String name) {
+        winner.setName(name);
+        int value = winner.getMovements() * columnsAmount * rowsAmount;
+        Score toAdd = new Score(winner, value, getGameParameters());
+        if(root == null) {
+            root = toAdd;
+        } else {
+            addScore(root, toAdd);
+        }//End if/else
+    }//End addScore
+
+    private void addScore(Score current, Score toAdd) {
+        if(current.getScore() > toAdd.getScore()) {
+            if(current.getRight() == null) {
+                current.setRight(toAdd);
+            } else {
+                addScore(current.getRight(), toAdd);
+            }//End if/else
+        } else {
+            if(current.getLeft() == null) {
+                current.setLeft(toAdd);
+            } else {
+                addScore(current.getLeft(), toAdd);
+            }//End if/else
+        }//End if/else
+    }//End addScore
+
+    public Board clone() {
+        Cloner cloner = new Cloner();
+        Board myClone = cloner.deepClone(this);
+        return myClone;
+    }//End clone
+
+    /*
     public static void main(String[] args){
       Board b = new Board();
       Scanner s = new Scanner(System.in);
@@ -342,12 +413,12 @@ public class Board {
         text = "Gano $";
       System.out.println(b.getPlayableBoard());
       System.out.println("\n");
-      win = b.movePlayer("#",1);
+      win = b.movePlayer("#",2);
       if(win)
         text = "Gano #";
       System.out.println(b.getPlayableBoard());
       System.out.println("\n");
-      win = b.movePlayer("%",1);
+      win = b.movePlayer("%",3);
       if(win)
         text = "Gano %";
       System.out.println(b.getPlayableBoard());
@@ -398,5 +469,7 @@ public class Board {
       System.out.println(b.getPlayableBoard());
       System.out.println("\n");
       System.out.println(text);
+      s.close();
     }//End main*/
+
 }//End Board Class

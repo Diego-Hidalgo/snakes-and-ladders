@@ -198,7 +198,7 @@ public class Square {
     }//End setDown
 
     /**
-     * <br>
+     * returns the element that is under the current Square in the linked list.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the element under the current object in the linked list. <br>
      */
@@ -207,10 +207,10 @@ public class Square {
     }//End getDown
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param p
+     * Adds a new player that is placed on the current Square to the linked list of player<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> a new player has been added to the list of players of the current Square. <br>
+     * @param p the new player that is placed on this Square.
      */
     public void addCurrentsPlayers(Player p){
       if(currentPlayers == null){
@@ -221,11 +221,11 @@ public class Square {
     }//End addCurrentsPlayers
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param toAdd
+     * Adds a new player that is placed on the current Square to the linked list of players. Its called when the list is not empty.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> a new player has been added to the list of players of the curren Square. <br>
+     * @param current the current player in the list. The new player will be added next to this.
+     * @param toAdd the new player that is placed on this Square and will be added.
      */
     private void addCurrentsPlayers(Player current,Player toAdd){
       if(current.getSquareNextPartner() == null){
@@ -236,10 +236,10 @@ public class Square {
     }//End addCurrentsPlayers
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param toRemove
+     * removes a specific player from the current Square.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the player has been removed from the Square. <br>
+     * @param toRemove the player that will be removed from the Square.
      */
     public void removePlayer(Player toRemove){
       if(currentPlayers == toRemove){
@@ -253,11 +253,11 @@ public class Square {
     }//End removeCurrentPlayer
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param toRemove
+     * removes a specific player from the current Square.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the player has been removed from the Square. <br>
+     * @param current the current player that is being used as reference to find the player to remove.
+     * @param toRemove the player that will be removed from the Square.
      */
     private void removePlayer(Player current, Player toRemove){
       if(current != null){
@@ -276,9 +276,9 @@ public class Square {
     }//End removePlayer
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
+     * calls the method that puts the symbols of the players in a String and returns it.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> returns the symbols of the current players in a String. <br>
      */
     public String getCurrentPlayers(){
       playerInSquare = new String();
@@ -287,9 +287,9 @@ public class Square {
     }//End getCurrentsPlayers
 
     /**
-     * <br>
-     *     <b>pre:</b> the object that calls the method is not null. <br>
-     *     <b>post:</b>
+     * puts the symbols of the current players in the square in a String.<br>
+     *     <b>pre:</b> the variable where the symbols will be putted has been initialized. <br>
+     *     <b>post:</b> puts the symbols of the current players in a String. <br>
      * @param current
      */
     private void currentPlayers(Player current){
@@ -299,34 +299,78 @@ public class Square {
       }//End if
     }//End currentPlayers
 
+    /**
+     * changes the end (head) of a snake represented by a Square object.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the head of the snake has been changed. <br>
+     * @param head the new head of the snake.
+     */
     public void setSnakeHead(Square head){
       snakeHead = head;
     }//End setSnakeHead
 
+    /**
+     * changes the start (tail) of a snake represented by a Square object.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the tail of the snake has been changed. <br>
+     * @param tail the new tail of the snake.
+     */
     public void setSnakeTail(Square tail){
       snakeTail = tail;
     }//End setSnakeTail
 
+    /**
+     * returns the end of a snake (head) represented by a Square object. <br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the head of the snake. <br>
+     */
     public Square getSnakeHead(){
       return snakeHead;
     }//End getSnakeHead
 
+    /**
+     * returns the start of a snake (tail) represented by a Square object.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the tail of the snake. <br>
+     */
     public Square getSnakeTail(){
       return snakeTail;
     }//End getSnakeTail
 
+    /**
+     * changes the end of a ladder (top) represented by a Square object. <br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the top of the ladder has been changed. <br>
+     * @param top the new top of the ladder.
+     */
     public void setLadderTop(Square top){
       ladderTop = top;
     }//End setLadderTop
 
+    /**
+     * changes the start of a ladder (bottom) represented by a Square object.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/>
+     * @param bot the new bottom of the ladder.
+     */
     public void setLadderBot(Square bot){
       ladderBot = bot;
     }//End setLadderBot
 
+    /**
+     * returns the top of the ladder in the current Square.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the top of the ladder of the current Square. <br>
+     */
     public Square getLadderTop(){
       return ladderTop;
     }//End getLadderTop
 
+    /**
+     * returns the bottom of the ladder in the current Square.<br>
+     *     <b>pre</b> the object that calls the method is not null. <br>
+     *     <b>post:<b/> the bottom of the ladder of the current Square. <br>
+     */
     public Square getLadderBot(){
       return ladderBot;
     }//End getLadderBop
