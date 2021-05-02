@@ -140,38 +140,38 @@ public class Player {
     }//End getPosition
 
     /**
-     * <br>
+     * changes the player that is next to the current player in the square.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
-     *     <b>post:</b>
-     * @param next
+     *     <b>post:</b> the next partner has been changed. <br>
+     * @param next the new player that is placed next to the current player.
      */
     public void setSquareNextPartner(Player next){
       squareNextPartner = next;
     }//End setSquareNextPartner
 
     /**
-     * <br>
+     * returns the player that is next to the current player in the square.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
-     *     <b>post:</b>
+     *     <b>post:</b> the player next to the current player in the square. <br>
      */
     public Player getSquareNextPartner(){
       return squareNextPartner;
     }//End setSquareNextPartner
 
     /**
-     * <br>
+     * changes the player that is previous to the current player in the square.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
-     *     <b>post:</b>
-     * @param prev
+     *     <b>post:</b> the previous partner has been changed. <br>
+     * @param prev the new player that is placed previous to the current player.
      */
     public void setSquarePrevPartner(Player prev){
       squarePrevPartner = prev;
     }//End setSquareNextPartner
 
     /**
-     * <br>
+     * returns the player that is previous to the current player in the square.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
-     *     <b>post:</b>
+     *     <b>post:</b> the player previous to the current player in the square. <br>
      */
     public Player getSquarePrevPartner(){
       return squarePrevPartner;
