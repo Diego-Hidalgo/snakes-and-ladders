@@ -154,7 +154,7 @@ public class Menu {
     }//End doCommandOperation
 
     public void showPositioningList() {
-        //por hacer
+        //To Do
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{
