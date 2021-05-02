@@ -67,7 +67,7 @@ public class Menu {
             board.receiveGameParameters(rows, columns, snakes, ladders, subPlayers);
         }//End try/catch
         bw.write(board.getEnumeratedBoard() + "\n");
-        bw.flush();
+        //bw.flush();
         readCommandOperation();
     }//End readParameters
 
@@ -77,8 +77,8 @@ public class Menu {
         String command = br.readLine();
         bw.write("\n");
         bw.flush();
+        doCommandOperation(command.toUpperCase());
         if(!command.equalsIgnoreCase(MENU_COMMAND)) {
-            doCommandOperation(command.toUpperCase());
             readCommandOperation();
         } else {
             board = new Board();
@@ -109,6 +109,8 @@ public class Menu {
                 break;
             case SIMUL_COMMAND:
                 simulation();
+                break;
+            case MENU_COMMAND:
                 break;
             default:
                 bw.write("Comando no reconocido\n");
