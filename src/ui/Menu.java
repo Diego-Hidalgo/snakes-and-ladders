@@ -65,20 +65,25 @@ public class Menu {
         } catch (NumberFormatException nfe) {
             board.receiveGameParameters(rows, columns, snakes, ladders, subPlayers);
         }//End try/catch
+        bw.write("--- JUEGO INICIADO ---\n");
         bw.write(board.getEnumeratedBoard() + "\n");
-        //bw.flush();
+        bw.flush();
         readCommandOperation();
     }//End readParameters
 
     public void readCommandOperation() throws IOException {
-        bw.write("Comando: ");
-        bw.flush();
-        String command = br.readLine();
-        bw.write("\n");
-        bw.flush();
-        doCommandOperation(command.toUpperCase());
-        if(!command.equalsIgnoreCase(MENU_COMMAND)) {
-            readCommandOperation();
+        if(!board.getGameStatus()) {
+            bw.write("Comando: ");
+            bw.flush();
+            String command = br.readLine();
+            bw.write("\n");
+            bw.flush();
+            doCommandOperation(command.toUpperCase());
+            if (!command.equalsIgnoreCase(MENU_COMMAND)) {
+                readCommandOperation();
+            } else {
+                board = new Board();
+            }//End if/else
         } else {
             board = new Board();
         }//End if/else
@@ -89,8 +94,10 @@ public class Menu {
         bw.write(board.getPlayableBoard());
         bw.flush();
         if(board.getGameStatus()) {
-            //por hacer
-        }
+            bw.write("--- JUEGO TERMINADO ---\n");
+            bw.write(board.getWinnerInfo() + "\n");
+            bw.flush();
+        }//End if
     }//End play
 
     public void simulation() throws IOException {
@@ -114,7 +121,7 @@ public class Menu {
             }
             simulation(simul);
         } else {
-            bw.write("Ha ganado el mas kpo\n");
+            bw.write(simul.getWinnerInfo() + "\n");
             bw.write("--- SIMULACION TERMINADA ---\n\n");
             bw.flush();
         }//End if/else

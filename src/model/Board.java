@@ -11,6 +11,7 @@ public class Board {
     private final static String RESET = "\u001B[0m";
 
     private Player firstPlayer;
+    private Player winner;
     private Square firstSquare;
     private String board;
     private int maxOcupation;
@@ -25,6 +26,11 @@ public class Board {
       firstSquare = new Square(0,0,1);
       gameStatus = false;
     }//End Constructor
+
+    public String getWinnerInfo() {
+        String info = "El jugador " + winner.getSymbol() + " ha ganado el juego con " + winner.getMovements() + " movimientos.";
+        return info;
+    }//End getWinnerinfo
 
     public void setGameStatus(boolean gameStatus) {
         this.gameStatus = gameStatus;
@@ -173,6 +179,7 @@ public class Board {
       boolean check = false;
       if( currentPlayer.getPosition().getSquareNumber() == (columnsAmount*rowsAmount) ){
           check = true;
+          winner = currentPlayer;
       }else if( currentPlayer.getPosition().getSnakeTail() != null ){
           moveToSnakeTail(currentPlayer);
       }else if( currentPlayer.getPosition().getLadderTop() != null ){
