@@ -376,10 +376,9 @@ public class Board {
         }//End if/else
     }//End addScore
 
-    public Board clone() {
+    public Board cloneBoard() {
         Cloner cloner = new Cloner();
-        Board myClone = cloner.deepClone(this);
-        return myClone;
+        return cloner.deepClone(this);
     }//End clone
 
     /*

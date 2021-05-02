@@ -106,7 +106,7 @@ public class Menu {
     }//End play
 
     public void simulation() throws IOException {
-        Board simul = (Board) board.clone();
+        Board simul = (Board) board.cloneBoard();
         bw.write("--- SIMULACION INICIADA ---\n");
         bw.flush();
         simulation(simul);
@@ -154,7 +154,7 @@ public class Menu {
     }//End doCommandOperation
 
     public void showPositioningList() {
-        //por hacer
+        //To Do
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{
