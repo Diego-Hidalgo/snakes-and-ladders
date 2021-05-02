@@ -16,6 +16,7 @@ public class Board {
     private float currentOcupation;
     private int columnsAmount;
     private int rowsAmount;
+    private boolean gameStatus;
     private String auxRow;
     private String gameParameters;
     private Random selector;
@@ -23,7 +24,16 @@ public class Board {
     public Board() {
       firstSquare = new Square(0,0,1);
       selector = new Random();
+      gameStatus = false;
     }//End Constructor
+
+    public void setGameStatus(boolean gameStatus) {
+        this.gameStatus = gameStatus;
+    }//End setGameStatus
+
+    public boolean getGameStatus() {
+        return gameStatus;
+    }//End getGameStatus
 
     public void setGameParameters(String gameParameters) {
         this.gameParameters = gameParameters;
@@ -50,6 +60,15 @@ public class Board {
         generateSnakesAndLadders(snakes, ladders);
         addAllPlayers(symbols, 0);
     }//End receiveGameParameters
+
+    public String throwDice() {
+        Random r = new Random();
+        int steps = r.nextInt(6) + 1;
+        String info = "El jugador " + firstPlayer.getSymbol() + " ha lanzado el dado y obtuvo el puntaje " + steps;
+        setGameStatus(movePlayer(firstPlayer.getSymbol(), steps));
+        firstPlayer = firstPlayer.getNext();
+        return info;
+    }//End throwDice
 
     public void createBoard(int row,int col) {
       columnsAmount = col;
@@ -229,6 +248,7 @@ public class Board {
     private int generateHeadSquare(){
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
+
     private int generateTailSquare(int squareHeadNumber){
       int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
       n = ((n-1)*columnsAmount);
@@ -350,12 +370,12 @@ public class Board {
         text = "Gano $";
       System.out.println(b.getPlayableBoard());
       System.out.println("\n");
-      win = b.movePlayer("#",1);
+      win = b.movePlayer("#",2);
       if(win)
         text = "Gano #";
       System.out.println(b.getPlayableBoard());
       System.out.println("\n");
-      win = b.movePlayer("%",1);
+      win = b.movePlayer("%",3);
       if(win)
         text = "Gano %";
       System.out.println(b.getPlayableBoard());

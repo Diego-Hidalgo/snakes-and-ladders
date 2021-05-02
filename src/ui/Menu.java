@@ -43,6 +43,8 @@ public class Menu {
         bw.write("\nParámetros de juego: ");
         bw.flush();
         String params = br.readLine();
+        bw.write("\n");
+        bw.flush();
         try {
             int rows = Integer.parseInt(String.valueOf(params.charAt(0)));
             int columns = Integer.parseInt(String.valueOf(params.charAt(2)));
@@ -70,9 +72,11 @@ public class Menu {
     }//End readParameters
 
     public void readCommandOperation() throws IOException {
-        bw.write(": ");
+        bw.write("Comando: ");
         bw.flush();
         String command = br.readLine();
+        bw.write("\n");
+        bw.flush();
         if(!command.equalsIgnoreCase(MENU_COMMAND)) {
             doCommandOperation(command.toUpperCase());
             readCommandOperation();
@@ -81,17 +85,30 @@ public class Menu {
         }//End if/else
     }//End readCommandOperation
 
+    public void play() throws IOException {
+        bw.write(board.throwDice() + "\n");
+        bw.write(board.getPlayableBoard());
+        bw.flush();
+        if(board.getGameStatus()) {
+            //por hacer
+        }
+    }//End play
+
+    public void simulation() throws IOException {
+        //por hacer
+    }//End simulation
+
     public void doCommandOperation(String command) throws IOException {
         switch(command) {
             case THROW_DICE_COMMAND:
+                play();
                 break;
             case NUM_COMMAND:
-                br.readLine();
+                bw.write("\n" + board.getEnumeratedBoard() + "\n");
+                bw.flush();
                 break;
             case SIMUL_COMMAND:
-                br.readLine();
-                break;
-            case MENU_COMMAND:
+                simulation();
                 break;
             default:
                 bw.write("Comando no reconocido\n");
@@ -100,7 +117,7 @@ public class Menu {
     }//End doCommandOperation
 
     public void showPositioningList() {
-
+        //por hacer
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{
