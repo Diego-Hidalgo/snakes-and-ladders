@@ -10,6 +10,7 @@ public class Board {
     private final static String BOLD_FONT = "\033[0;1m";
     private final static String RESET = "\u001B[0m";
 
+    private Score root;
     private Player firstPlayer;
     private Player winner;
     private Square firstSquare;
@@ -71,6 +72,7 @@ public class Board {
         int steps = r.nextInt(6) + 1;
         String info = "El jugador " + firstPlayer.getSymbol() + " ha lanzado el dado y obtuvo el puntaje " + steps;
         setGameStatus(movePlayer(firstPlayer.getSymbol(), steps));
+        firstPlayer.setMovements(firstPlayer.getMovements() + steps);
         firstPlayer = firstPlayer.getNext();
         return info;
     }//End throwDice
@@ -346,6 +348,33 @@ public class Board {
         setLadderBot(next,symbol,goal,head);
       }
     }//End setLadderBot
+
+    public void addScore(String name) {
+        winner.setName(name);
+        int value = winner.getMovements() * columnsAmount * rowsAmount;
+        Score toAdd = new Score(winner, value, getGameParameters());
+        if(root == null) {
+            root = toAdd;
+        } else {
+            addScore(root, toAdd);
+        }//End if/else
+    }//End addScore
+
+    private void addScore(Score current, Score toAdd) {
+        if(current.getScore() > toAdd.getScore()) {
+            if(current.getRight() == null) {
+                current.setRight(toAdd);
+            } else {
+                addScore(current.getRight(), toAdd);
+            }//End if/else
+        } else {
+            if(current.getLeft() == null) {
+                current.setLeft(toAdd);
+            } else {
+                addScore(current.getLeft(), toAdd);
+            }//End if/else
+        }//End if/else
+    }//End addScore
 
     public Board clone() {
         Cloner cloner = new Cloner();

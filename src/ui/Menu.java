@@ -30,7 +30,7 @@ public class Menu {
     }//End constructor
 
     public void showMainMenu() throws IOException {
-        bw.write("\n¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
+        bw.write("¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
         bw.flush();
     }//End showMenu
 
@@ -72,22 +72,22 @@ public class Menu {
     }//End readParameters
 
     public void readCommandOperation() throws IOException {
-        if(!board.getGameStatus()) {
-            bw.write("Comando: ");
-            bw.flush();
-            String command = br.readLine();
-            bw.write("\n");
-            bw.flush();
-            doCommandOperation(command.toUpperCase());
-            if (!command.equalsIgnoreCase(MENU_COMMAND)) {
-                readCommandOperation();
-            } else {
-                board = new Board();
-            }//End if/else
+        bw.write("Comando: ");
+        bw.flush();
+        String command = br.readLine().toUpperCase();
+        bw.write("\n");
+        bw.flush();
+        doCommandOperation(command);
+        if(!board.getGameStatus() && !command.equals(MENU_COMMAND)) {
+            readCommandOperation();
         } else {
-            board = new Board();
+            restart();
         }//End if/else
     }//End readCommandOperation
+
+    public void restart() {
+        board = new Board();
+    }//End restart
 
     public void play() throws IOException {
         bw.write(board.throwDice() + "\n");
@@ -95,7 +95,12 @@ public class Menu {
         bw.flush();
         if(board.getGameStatus()) {
             bw.write("--- JUEGO TERMINADO ---\n");
-            bw.write(board.getWinnerInfo() + "\n");
+            bw.write(board.getWinnerInfo());
+            bw.flush();
+            bw.write("Nickname: ");
+            String nickname = br.readLine();
+            board.addScore(nickname);
+            bw.write("\n");
             bw.flush();
         }//End if
     }//End play
@@ -140,6 +145,7 @@ public class Menu {
                 simulation();
                 break;
             case MENU_COMMAND:
+                restart();
                 break;
             default:
                 bw.write("Comando no reconocido\n");
