@@ -1,4 +1,5 @@
 package model;
+import com.rits.cloning.Cloner;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -19,11 +20,9 @@ public class Board {
     private boolean gameStatus;
     private String auxRow;
     private String gameParameters;
-    private Random selector;
 
     public Board() {
       firstSquare = new Square(0,0,1);
-      selector = new Random();
       gameStatus = false;
     }//End Constructor
 
@@ -246,12 +245,14 @@ public class Board {
     }//End generateSnakes
 
     private int generateHeadSquare(){
+      Random selector = new Random();
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
 
     private int generateTailSquare(int squareHeadNumber){
       int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
       n = ((n-1)*columnsAmount);
+      Random selector = new Random();
       int s = selector.nextInt(n) + 1;
       return s;
     }//End generateTailSquare
@@ -338,6 +339,12 @@ public class Board {
         setLadderBot(next,symbol,goal,head);
       }
     }//End setLadderBot
+
+    public Board clone() {
+        Cloner cloner = new Cloner();
+        Board myClone = cloner.deepClone(this);
+        return myClone;
+    }//End clone
 
     /*
     public static void main(String[] args){

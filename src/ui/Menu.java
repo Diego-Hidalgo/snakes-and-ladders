@@ -53,9 +53,8 @@ public class Menu {
             String subPlayers = params.substring(8);
             passParameters(rows, columns, snakes, ladders, subPlayers);
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
-            bw.write("\nPor favor revise los parámetros de juego.\n\n");
+            bw.write("Por favor revise los parámetros de juego.\n");
             bw.flush();
-            br.readLine();
         }//End try/catch
     }//End readParameters
 
@@ -95,7 +94,30 @@ public class Menu {
     }//End play
 
     public void simulation() throws IOException {
-        //por hacer
+        Board simul = (Board) board.clone();
+        bw.write("--- SIMULACION INICIADA ---\n");
+        bw.flush();
+        simulation(simul);
+        bw.write(board.getPlayableBoard());
+        bw.flush();
+    }//End simulation
+
+    public void simulation(Board simul) throws IOException {
+        if(!simul.getGameStatus()) {
+            bw.write(simul.throwDice() + "\n");
+            bw.write(simul.getPlayableBoard());
+            bw.flush();
+            try {
+                Thread.sleep(2000);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            simulation(simul);
+        } else {
+            bw.write("Ha ganado el mas kpo\n");
+            bw.write("--- SIMULACION TERMINADA ---\n\n");
+            bw.flush();
+        }//End if/else
     }//End simulation
 
     public void doCommandOperation(String command) throws IOException {
