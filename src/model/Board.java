@@ -244,17 +244,28 @@ public class Board {
 
     public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
       char s = 65;
-      generateSnakes(snakesAmount,s);
-      generateLadders(laddersAmount,1);
+			generateSnakesAndLadders(snakesAmount,laddersAmount,s,1);
+      //generateSnakes(snakesAmount,s);
+      //generateLadders(laddersAmount,1);
     }//End generateSnakesAndLadders
-
+		private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol){
+			Random selector = new Random();
+			int select = selector.nextInt(2);
+			if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
+				generateSnakes(snakesAmount,snakeSymbol);
+				generateSnakesAndLadders((--snakesAmount),laddersAmount,(++snakeSymbol),ladderSymbol);
+			}else if(currentOcupation < maxOcupation && laddersAmount > 0 ){
+				generateLadders(laddersAmount,ladderSymbol);
+				generateSnakesAndLadders(snakesAmount,(--laddersAmount),snakeSymbol,(++ladderSymbol));
+			}//End else
+		}//End generateSnakesAndLadders
     public void generateSnakes(int snakesAmount, char symbol){
       if(snakesAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
         int squareHeadNumber = generateHeadSquare();
         Square head = setSnakeHead(firstSquare.getDown(),symbol,squareHeadNumber);
         if(head != null)
             setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
-        generateSnakes((--snakesAmount),(++symbol));
+        //generateSnakes((--snakesAmount),(++symbol));
       }//End if
     }//End generateSnakes
 
@@ -265,10 +276,7 @@ public class Board {
 
     private int generateTailSquare(int squareHeadNumber){
       int r = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
-      //int n = ((r-1)*columnsAmount);
       Random selector = new Random();
-      //int s = selector.nextInt(n) + 1;
-			//s = (s==1)? selector.nextInt( ( (r-1)*columnsAmount) -1) + 2 : s;
 			int s = selector.nextInt( ( (r-1)*columnsAmount) - 1) + 2;
       return s;
     }//End generateTailSquare
@@ -294,17 +302,24 @@ public class Board {
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null ){
-        current.setSnake(String.valueOf(symbol));
+				System.out.println("Se agrego una cabeza en "+head.getSquareNumber());
+				System.out.println("Se agrego una cola en "+goal);
+				current.setSnake(String.valueOf(symbol));
         current.setSnakeHead(head);
         head.setSnakeTail(current);
         currentOcupation += 0.5;
       }else if( current != null &&  current.getSquareNumber() == goal &&
       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
        current.getLadderTop() != null || current.getLadderBot() != null) ){
-        setSnakeTail(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+				int q = generateTailSquare(head.getSquareNumber());
+				System.out.println("q es " + q);
+				System.out.println("Numero de la cabeza es " + head.getSquareNumber());
+        setSnakeTail(firstSquare,symbol,q,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
+				System.out.println("Next " + next);
+				System.out.println("Meta " + goal);
         setSnakeTail(next,symbol,goal,head);
       }
     }//End setSnake
@@ -315,7 +330,7 @@ public class Board {
         Square head = setLadderTop(firstSquare.getDown(),symbol,squareTopNumber);
         if(head != null)
             setLadderBot(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
-        generateLadders((--laddersAmount),(++symbol));
+        //generateLadders((--laddersAmount),(++symbol));
       }//End if
     }//End generateLadders
 
@@ -341,16 +356,23 @@ public class Board {
     public void setLadderBot(Square current,int symbol, int goal,Square head){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
-        current.setLadder(String.valueOf(symbol));
+				System.out.println("Se agrego top en "+head.getSquareNumber());
+				System.out.println("Se agrego la base en "+goal);
+				current.setLadder(String.valueOf(symbol));
         current.setLadderTop(head);
         head.setLadderBot(current);
         currentOcupation += 0.5;
       }else if(current != null &&  current.getSquareNumber() == goal &&
        (current.getSnakeHead() != null || current.getSnakeTail() != null ||
         current.getLadderTop() != null || current.getLadderBot() != null) ){
-        setLadderBot(firstSquare,symbol,generateTailSquare(head.getSquareNumber()),head);
+				int q = generateTailSquare(head.getSquareNumber());
+				System.out.println("q es " + q);
+				System.out.println("Numero de la cabeza es " + head.getSquareNumber());
+        setLadderBot(firstSquare,symbol,q,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
+				System.out.println("Next " + next);
+				System.out.println("Meta " + goal);
         next = (next == null)?current.getDown():next;
         setLadderBot(next,symbol,goal,head);
       }
