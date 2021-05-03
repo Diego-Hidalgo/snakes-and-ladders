@@ -18,7 +18,7 @@ public class Menu {
 
     private final static String THROW_DICE_COMMAND = "";
     private final static String NUM_COMMAND = "NUM";
-    private final static String SIMUL_COMMAND = "SIMUL";
+    //private final static String SIMUL_COMMAND = "SIMUL";
     private final static String MENU_COMMAND = "MENU";
 
     private Board board;
@@ -30,7 +30,7 @@ public class Menu {
     }//End constructor
 
     public void showMainMenu() throws IOException {
-        bw.write("¿Qué desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
+        bw.write("Qu\u00e9 desea hacer?\n[1] Jugar\n[2] Ver lista de puntuaciones\n[3] Salir\nOpcion: ");
         bw.flush();
     }//End showMenu
 
@@ -40,7 +40,7 @@ public class Menu {
     }//End readOption
 
     public void readParameters() throws IOException {
-        bw.write("\nParámetros de juego: ");
+        bw.write("\nPar\u00e1metros de juego: ");
         bw.flush();
         String params = br.readLine();
         bw.write("\n");
@@ -53,7 +53,7 @@ public class Menu {
             String subPlayers = params.substring(8);
             passParameters(rows, columns, snakes, ladders, subPlayers);
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
-            bw.write("Por favor revise los parámetros de juego.\n");
+            bw.write("Por favor revise los par\\u00e1metros de juego.\n");
             bw.flush();
         }//End try/catch
     }//End readParameters
@@ -105,14 +105,14 @@ public class Menu {
         }//End if
     }//End play
 
-    public void simulation() throws IOException {
+   /* public void simulation() throws IOException {
         Board simul = (Board) board.cloneBoard();
         bw.write("--- SIMULACION INICIADA ---\n");
         bw.flush();
         simulation(simul);
         bw.write(board.getPlayableBoard());
         bw.flush();
-    }//End simulation
+    }//End simulation*/
 
     public void simulation(Board simul) throws IOException {
         if(!simul.getGameStatus()) {
@@ -141,9 +141,9 @@ public class Menu {
                 bw.write("\n" + board.getEnumeratedBoard() + "\n");
                 bw.flush();
                 break;
-            case SIMUL_COMMAND:
+            /*case SIMUL_COMMAND:
                 simulation();
-                break;
+                break;*/
             case MENU_COMMAND:
                 restart();
                 break;

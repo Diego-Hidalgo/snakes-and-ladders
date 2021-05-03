@@ -1,14 +1,19 @@
 package model;
-import com.rits.cloning.Cloner;
-//import java.util.Scanner;
+
 import java.util.Random;
+//import com.rits.cloning.Cloner;
 
 public class Board {
 
-    private final static String RED = "\033[31m";
+    /*private final static String RED = "\033[31m";
     private final static String BLUE ="\033[34m";
     private final static String BOLD_FONT = "\033[0;1m";
-    private final static String RESET = "\u001B[0m";
+    private final static String RESET = "\u001B[0m";*/
+
+	private final static String RED = "";
+    private final static String BLUE ="";
+    private final static String BOLD_FONT = "";
+    private final static String RESET = "";
 
     private Score root;
     private Player firstPlayer;
@@ -257,12 +262,14 @@ public class Board {
       Random selector = new Random();
       return selector.nextInt( ( (rowsAmount*columnsAmount) - columnsAmount - 1) ) + columnsAmount + 1;
     }//End generateHeadSquare
-    
+
     private int generateTailSquare(int squareHeadNumber){
-      int n = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
-      n = ((n-1)*columnsAmount);
+      int r = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
+      //int n = ((r-1)*columnsAmount);
       Random selector = new Random();
-      int s = selector.nextInt(n) + 1;
+      //int s = selector.nextInt(n) + 1;
+			//s = (s==1)? selector.nextInt( ( (r-1)*columnsAmount) -1) + 2 : s;
+			int s = selector.nextInt( ( (r-1)*columnsAmount) - 1) + 2;
       return s;
     }//End generateTailSquare
 
@@ -376,7 +383,7 @@ public class Board {
         }//End if/else
     }//End addScore
 
-    public Board cloneBoard() {
+    /*public Board cloneBoard() {
         Cloner cloner = new Cloner();
         return cloner.deepClone(this);
     }//End clone
