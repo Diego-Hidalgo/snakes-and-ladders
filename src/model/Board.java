@@ -1,19 +1,14 @@
 package model;
 
+import java.io.*;
 import java.util.Random;
-//import com.rits.cloning.Cloner;
 
-public class Board {
+public class Board implements Serializable {
 
-    /*private final static String RED = "\033[31m";
+    private final static String RED = "\033[31m";
     private final static String BLUE ="\033[34m";
     private final static String BOLD_FONT = "\033[0;1m";
-    private final static String RESET = "\u001B[0m";*/
-
-	private final static String RED = "";
-    private final static String BLUE ="";
-    private final static String BOLD_FONT = "";
-    private final static String RESET = "";
+    private final static String RESET = "\u001B[0m";
 
     private Score root;
     private Player firstPlayer;
@@ -383,9 +378,13 @@ public class Board {
         }//End if/else
     }//End addScore
 
-    /*public Board cloneBoard() {
-        Cloner cloner = new Cloner();
-        return cloner.deepClone(this);
+    public Object deepClone() throws Exception {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(this);
+        ByteArrayInputStream bais = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+        ObjectInputStream objectInputStream = new ObjectInputStream(bais);
+        return objectInputStream.readObject();
     }//End clone
 
     /*

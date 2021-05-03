@@ -18,7 +18,7 @@ public class Menu {
 
     private final static String THROW_DICE_COMMAND = "";
     private final static String NUM_COMMAND = "NUM";
-    //private final static String SIMUL_COMMAND = "SIMUL";
+    private final static String SIMUL_COMMAND = "SIMUL";
     private final static String MENU_COMMAND = "MENU";
 
     private Board board;
@@ -105,14 +105,19 @@ public class Menu {
         }//End if
     }//End play
 
-   /* public void simulation() throws IOException {
-        Board simul = (Board) board.cloneBoard();
-        bw.write("--- SIMULACION INICIADA ---\n");
-        bw.flush();
-        simulation(simul);
+   public void simulation() throws IOException {
+        try {
+            Board simul = (Board) board.deepClone();
+            bw.write("--- SIMULACION INICIADA ---\n");
+            bw.flush();
+            simulation(simul);
+        } catch(Exception e) {
+            bw.write("Un error ha ocurrido :(\n");
+            bw.flush();
+        }//End try/catch
         bw.write(board.getPlayableBoard());
         bw.flush();
-    }//End simulation*/
+    }//End simulation
 
     public void simulation(Board simul) throws IOException {
         if(!simul.getGameStatus()) {
@@ -141,9 +146,9 @@ public class Menu {
                 bw.write("\n" + board.getEnumeratedBoard() + "\n");
                 bw.flush();
                 break;
-            /*case SIMUL_COMMAND:
+            case SIMUL_COMMAND:
                 simulation();
-                break;*/
+                break;
             case MENU_COMMAND:
                 restart();
                 break;
