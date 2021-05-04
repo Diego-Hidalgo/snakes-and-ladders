@@ -5,10 +5,16 @@ import java.util.Random;
 
 public class Board implements Serializable {
 
-    private final static String RED = "\033[31m";
-    private final static String BLUE ="\033[34m";
-    private final static String BOLD_FONT = "\033[0;1m";
-    private final static String RESET = "\u001B[0m";
+	/*private static final long serialVersionUID = 1L;
+	private final static String RED = "\033[31m";
+  private final static String BLUE ="\033[34m";
+  private final static String BOLD_FONT = "\033[0;1m";
+  private final static String RESET = "\u001B[0m";*/
+
+	private final static String RED = "";
+    private final static String BLUE ="";
+    private final static String BOLD_FONT = "";
+    private final static String RESET = "";
 
     private Score root;
     private Player firstPlayer;
@@ -80,7 +86,7 @@ public class Board implements Serializable {
     public void createBoard(int row,int col) {
       columnsAmount = col;
       rowsAmount = row;
-      maxOcupation = (int) Math.floor(((row*col)-2)/2);
+      maxOcupation = ((int) Math.floor(((row*col)-2)/2)) - 1;
       addColumns(firstSquare);
       addRows(firstSquare);
     }//End createBoard
@@ -239,21 +245,20 @@ public class Board implements Serializable {
 
     public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
       char s = 65;
-			generateSnakesAndLadders(snakesAmount,laddersAmount,s,1);
-      //generateSnakes(snakesAmount,s);
-      //generateLadders(laddersAmount,1);
+	  generateSnakesAndLadders(snakesAmount,laddersAmount,s,1);
     }//End generateSnakesAndLadders
-		private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol){
-			Random selector = new Random();
-			int select = selector.nextInt(2);
-			if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
-				generateSnakes(snakesAmount,snakeSymbol);
-				generateSnakesAndLadders((--snakesAmount),laddersAmount,(++snakeSymbol),ladderSymbol);
-			}else if(currentOcupation < maxOcupation && laddersAmount > 0 ){
-				generateLadders(laddersAmount,ladderSymbol);
-				generateSnakesAndLadders(snakesAmount,(--laddersAmount),snakeSymbol,(++ladderSymbol));
-			}//End else
-		}//End generateSnakesAndLadders
+
+	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol){
+		Random selector = new Random();
+		int select = selector.nextInt(2);
+		if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
+			generateSnakes(snakesAmount,snakeSymbol);
+			generateSnakesAndLadders((--snakesAmount),laddersAmount,(++snakeSymbol),ladderSymbol);
+		}else if(currentOcupation < maxOcupation && laddersAmount > 0 ){
+			generateLadders(laddersAmount,ladderSymbol);
+			generateSnakesAndLadders(snakesAmount,(--laddersAmount),snakeSymbol,(++ladderSymbol));
+		}//End else
+	}//End generateSnakesAndLadders
     public void generateSnakes(int snakesAmount, char symbol){
       if(snakesAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
         int squareHeadNumber = generateHeadSquare();
@@ -272,14 +277,26 @@ public class Board implements Serializable {
     private int generateTailSquare(int squareHeadNumber){
       int r = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
       Random selector = new Random();
-			int s = selector.nextInt( ( (r-1)*columnsAmount) - 1) + 2;
+	  int s = selector.nextInt( ( (r-1)*columnsAmount) - 1) + 2;
       return s;
     }//End generateTailSquare
+
+		public Square reLocatedHead(Square head,char symbol){
+			head.setSnake(null);
+			currentOcupation -= 0.5;
+			return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
+		}//End reLocatedHead
+
+		public Square reLocatedTop(Square head, int symbol){
+			head.setLadder(null);
+			currentOcupation -= 0.5;
+			return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
+		}//End reLocatedHead
 
     public Square setSnakeHead(Square current,char symbol,int goal){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
-        current.setSnake(String.valueOf(symbol));
+				current.setSnake(String.valueOf(symbol));
         currentOcupation += 0.5;
         return current;
       }else if( current != null &&  current.getSquareNumber() == goal &&
@@ -297,24 +314,19 @@ public class Board implements Serializable {
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null ){
-				System.out.println("Se agrego una cabeza en "+head.getSquareNumber());
-				System.out.println("Se agrego una cola en "+goal);
-				current.setSnake(String.valueOf(symbol));
+		current.setSnake(String.valueOf(symbol));
         current.setSnakeHead(head);
         head.setSnakeTail(current);
         currentOcupation += 0.5;
       }else if( current != null &&  current.getSquareNumber() == goal &&
       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
        current.getLadderTop() != null || current.getLadderBot() != null) ){
-				int q = generateTailSquare(head.getSquareNumber());
-				System.out.println("q es " + q);
-				System.out.println("Numero de la cabeza es " + head.getSquareNumber());
-        setSnakeTail(firstSquare,symbol,q,head);
+			 	head = reLocatedHead(head,symbol);
+				int tailGoal = generateTailSquare(head.getSquareNumber());
+				setSnakeTail(firstSquare,symbol,tailGoal,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
-				System.out.println("Next " + next);
-				System.out.println("Meta " + goal);
         setSnakeTail(next,symbol,goal,head);
       }
     }//End setSnake
@@ -333,7 +345,7 @@ public class Board implements Serializable {
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal
       && current.getSnakeHead() == null && current.getLadderTop() == null
       && current.getLadderBot() == null && current.getSnakeTail() == null){
-        current.setLadder(String.valueOf(symbol));
+				current.setLadder(String.valueOf(symbol));
         currentOcupation += 0.5;
         return current;
       }else if( current != null &&  current.getSquareNumber() == goal &&
@@ -351,23 +363,18 @@ public class Board implements Serializable {
     public void setLadderBot(Square current,int symbol, int goal,Square head){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
-				System.out.println("Se agrego top en "+head.getSquareNumber());
-				System.out.println("Se agrego la base en "+goal);
-				current.setLadder(String.valueOf(symbol));
+		current.setLadder(String.valueOf(symbol));
         current.setLadderTop(head);
         head.setLadderBot(current);
         currentOcupation += 0.5;
       }else if(current != null &&  current.getSquareNumber() == goal &&
        (current.getSnakeHead() != null || current.getSnakeTail() != null ||
         current.getLadderTop() != null || current.getLadderBot() != null) ){
-				int q = generateTailSquare(head.getSquareNumber());
-				System.out.println("q es " + q);
-				System.out.println("Numero de la cabeza es " + head.getSquareNumber());
-        setLadderBot(firstSquare,symbol,q,head);
+				head = reLocatedTop(head,symbol);
+				int botGoal = generateTailSquare(head.getSquareNumber());
+        setLadderBot(firstSquare,symbol,botGoal,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
-				System.out.println("Next " + next);
-				System.out.println("Meta " + goal);
         next = (next == null)?current.getDown():next;
         setLadderBot(next,symbol,goal,head);
       }
@@ -408,95 +415,4 @@ public class Board implements Serializable {
         ObjectInputStream objectInputStream = new ObjectInputStream(bais);
         return objectInputStream.readObject();
     }//End clone
-
-    /*
-    public static void main(String[] args){
-      Board b = new Board();
-      Scanner s = new Scanner(System.in);
-      boolean win = false;
-      String text = new String();
-      System.out.print("Filas ");
-      int n = s.nextInt();
-      s.nextLine();
-      System.out.print("Columnas ");
-      int m = s.nextInt();
-      b.createBoard(n,m);
-      System.out.print("Serpientes ");
-      s.nextLine();
-      int c = s.nextInt();
-      System.out.print("Escaleras ");
-      s.nextLine();
-      int d = s.nextInt();
-      b.generateSnakesAndLadders(c,d);
-      b.addPlayer("$");
-      b.addPlayer("#");
-      b.addPlayer("%");
-      System.out.println(b.getEnumeratedBoard());
-      System.out.println("\n");
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("#",2);
-      if(win)
-        text = "Gano #";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("%",3);
-      if(win)
-        text = "Gano %";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("#",1);
-      if(win)
-        text = "Gano #";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("#",1);
-      if(win)
-        text = "Gano #";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("%",1);
-      if(win)
-        text = "Gano %";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      win = b.movePlayer("$",1);
-      if(win)
-        text = "Gano $";
-      System.out.println(b.getPlayableBoard());
-      System.out.println("\n");
-      System.out.println(text);
-      s.close();
-    }//End main*/
-
 }//End Board Class
