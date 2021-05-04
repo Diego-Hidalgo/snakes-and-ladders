@@ -5,16 +5,12 @@ import java.util.Random;
 
 public class Board implements Serializable {
 
-	/*private static final long serialVersionUID = 1L;
-	private final static String RED = "\033[31m";
-  private final static String BLUE ="\033[34m";
-  private final static String BOLD_FONT = "\033[0;1m";
-  private final static String RESET = "\u001B[0m";*/
+  private static final long serialVersionUID = 1L;
 
-	private final static String RED = "";
-    private final static String BLUE ="";
-    private final static String BOLD_FONT = "";
-    private final static String RESET = "";
+  private static final String BLUE ="\033[34m";
+  private static final String RED = "\033[31m";
+  private static final String BOLD_FONT = "\033[0;1m";
+  private static final String RESET = "\u001B[0m";
 
     private Score root;
     private Player firstPlayer;

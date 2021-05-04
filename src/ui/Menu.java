@@ -12,14 +12,14 @@ public class Menu {
     private BufferedReader br;
     private BufferedWriter bw;
 
-    private final static int PLAY = 1;
-    private final static int SHOW_POSITIONS = 2;
-    private final static int EXIT = 3;
+    private static final int PLAY = 1;
+    private static final int SHOW_POSITIONS = 2;
+    private static final int EXIT = 3;
 
-    private final static String THROW_DICE_COMMAND = "";
-    private final static String NUM_COMMAND = "NUM";
-    private final static String SIMUL_COMMAND = "SIMUL";
-    private final static String MENU_COMMAND = "MENU";
+    private static final String THROW_DICE_COMMAND = "";
+    private static final String NUM_COMMAND = "NUM";
+    private static final String SIMUL_COMMAND = "SIMUL";
+    private static final String MENU_COMMAND = "MENU";
 
     private Board board;
 
