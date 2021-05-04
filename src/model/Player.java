@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
 
-    private String name;
+	private static final long serialVersionUID = 1L;
+	private String name;
     private String symbol;
     private int movements;
     private Square position;
