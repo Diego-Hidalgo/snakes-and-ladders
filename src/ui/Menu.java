@@ -53,7 +53,7 @@ public class Menu {
             String subPlayers = params.substring(8);
             passParameters(rows, columns, snakes, ladders, subPlayers);
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
-            bw.write("Por favor revise los par\\u00e1metros de juego.\n");
+            bw.write("Por favor revise los parametros de juego. \n\n");
             bw.flush();
         }//End try/catch
     }//End readParameters
@@ -96,14 +96,19 @@ public class Menu {
         if(board.getGameStatus()) {
             bw.write("--- JUEGO TERMINADO ---\n");
             bw.write(board.getWinnerInfo() + "\n");
-            bw.write("Nickname: ");
             bw.flush();
-            String nickname = br.readLine();
-            board.addScore(nickname);
-            bw.write("\n");
-            bw.flush();
+            readWinnerInformation();
         }//End if
     }//End play
+
+    public void readWinnerInformation() throws IOException {
+        bw.write("Nickname: ");
+        bw.flush();
+        String nickname = br.readLine();
+        board.addScore(nickname);
+        bw.write("\n");
+        bw.flush();
+    }//End readWinnerinformation
 
    public void simulation() throws IOException {
         try {

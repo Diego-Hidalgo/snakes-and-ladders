@@ -259,6 +259,7 @@ public class Board implements Serializable {
 			generateSnakesAndLadders(snakesAmount,(--laddersAmount),snakeSymbol,(++ladderSymbol));
 		}//End else
 	}//End generateSnakesAndLadders
+
     public void generateSnakes(int snakesAmount, char symbol){
       if(snakesAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
         int squareHeadNumber = generateHeadSquare();
@@ -281,17 +282,17 @@ public class Board implements Serializable {
       return s;
     }//End generateTailSquare
 
-		public Square reLocatedHead(Square head,char symbol){
-			head.setSnake(null);
-			currentOcupation -= 0.5;
-			return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
-		}//End reLocatedHead
+    public Square reLocatedHead(Square head,char symbol){
+        head.setSnake(null);
+        currentOcupation -= 0.5;
+        return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
+    }//End reLocatedHead
 
-		public Square reLocatedTop(Square head, int symbol){
-			head.setLadder(null);
-			currentOcupation -= 0.5;
-			return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
-		}//End reLocatedHead
+    public Square reLocatedTop(Square head, int symbol){
+        head.setLadder(null);
+        currentOcupation -= 0.5;
+        return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
+    }//End reLocatedHead
 
     public Square setSnakeHead(Square current,char symbol,int goal){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
@@ -414,6 +415,6 @@ public class Board implements Serializable {
         ByteArrayInputStream bais = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
         ObjectInputStream objectInputStream = new ObjectInputStream(bais);
         return objectInputStream.readObject();
-    }//End clone
+    }//End deepClone
 
 }//End Board Class
