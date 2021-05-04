@@ -143,6 +143,10 @@ public class Player implements Serializable {
       return position;
     }//End getPosition
 
+    public int getPositionNumber() {
+        return position.getSquareNumber();
+    }//End getPositionNumber
+
     /**
      * changes the player that is next to the current player in the square.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>

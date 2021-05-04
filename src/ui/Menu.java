@@ -86,7 +86,7 @@ public class Menu {
     }//End readCommandOperation
 
     public void restart() {
-        board = new Board();
+        board.reset();
     }//End restart
 
     public void play() throws IOException {
@@ -163,8 +163,11 @@ public class Menu {
         }//End switch
     }//End doCommandOperation
 
-    public void showPositioningList() {
-        //To Do
+    public void showPositioningList() throws IOException {
+        bw.write("\n--- MOSTRANDO LISTA DE PUNTAJES ---");
+        bw.write("\n" + board.getScoresInString());
+        bw.write("--- LISTA TERMINADA ---\n\n");
+        bw.flush();
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{

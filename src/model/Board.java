@@ -5,12 +5,12 @@ import java.util.Random;
 
 public class Board implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private static final String BLUE ="\033[34m";
-  private static final String RED = "\033[31m";
-  private static final String BOLD_FONT = "\033[0;1m";
-  private static final String RESET = "\u001B[0m";
+    private static final String BLUE ="\033[34m";
+    private static final String RED = "\033[31m";
+    private static final String BOLD_FONT = "\033[0;1m";
+    private static final String RESET = "\u001B[0m";
 
     private Score root;
     private Player firstPlayer;
@@ -29,6 +29,20 @@ public class Board implements Serializable {
       firstSquare = new Square(0,0,1);
       gameStatus = false;
     }//End Constructor
+
+    public void reset() {
+        firstPlayer = null;
+        winner = null;
+        firstSquare = new Square(0, 0, 1);
+        board = "";
+        maxOcupation = 0;
+        currentOcupation = 0;
+        columnsAmount = 0;
+        rowsAmount = 0;
+        gameStatus = false;
+        auxRow = "";
+        gameParameters = "";
+    }//End reset
 
     public String getWinnerInfo() {
         String info = "El jugador " + winner.getSymbol() + " ha ganado el juego con " + winner.getMovements() + " movimientos.";
@@ -70,11 +84,16 @@ public class Board implements Serializable {
     }//End receiveGameParameters
 
     public String throwDice() {
+        String info = "";
         Random r = new Random();
         int steps = r.nextInt(6) + 1;
-        String info = "El jugador " + firstPlayer.getSymbol() + " ha lanzado el dado y obtuvo el puntaje " + steps;
-        setGameStatus(movePlayer(firstPlayer.getSymbol(), steps));
-        firstPlayer.setMovements(firstPlayer.getMovements() + steps);
+        info = "El jugador " + firstPlayer.getSymbol() + " ha lanzado el dado y obtuvo el puntaje " + steps + ".";
+        if((firstPlayer.getPositionNumber() + steps) <= (rowsAmount * columnsAmount)) {
+            setGameStatus(movePlayer(firstPlayer.getSymbol(), steps));
+            firstPlayer.setMovements(firstPlayer.getMovements() + steps);
+        } else {
+            info += "\nNo se pudo mover porque necesita un puntaje menor o igual a " + ((rowsAmount*columnsAmount) - firstPlayer.getPositionNumber()) + ".";
+        }//End if/else
         firstPlayer = firstPlayer.getNext();
         return info;
     }//End throwDice
@@ -403,6 +422,24 @@ public class Board implements Serializable {
             }//End if/else
         }//End if/else
     }//End addScore
+
+    private String getScoresInString(Score current) {
+        String info = "";
+        if(current != null) {
+            info += current.toString();
+            info += getScoresInString(current.getLeft());
+            info += getScoresInString(current.getRight());
+        }//End if
+        return info;
+    }//End getScoresInString
+
+    public String getScoresInString() {
+        if(root == null) {
+            return "\nNo hay puntuaciones por mostrar \n";
+        } else {
+            return getScoresInString(root);
+        }//End if/else
+    }//End getScoresInString
 
     public Object deepClone() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
