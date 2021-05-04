@@ -95,9 +95,9 @@ public class Menu {
         bw.flush();
         if(board.getGameStatus()) {
             bw.write("--- JUEGO TERMINADO ---\n");
-            bw.write(board.getWinnerInfo());
-            bw.flush();
+            bw.write(board.getWinnerInfo() + "\n");
             bw.write("Nickname: ");
+            bw.flush();
             String nickname = br.readLine();
             board.addScore(nickname);
             bw.write("\n");
