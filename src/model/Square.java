@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Square implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	private int row;
     private int column;
     private String snake;

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Player implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	private String name;
     private String symbol;
     private int movements;
@@ -141,6 +142,10 @@ public class Player implements Serializable {
     public Square getPosition(){
       return position;
     }//End getPosition
+
+    public int getPositionNumber() {
+        return position.getSquareNumber();
+    }//End getPositionNumber
 
     /**
      * changes the player that is next to the current player in the square.<br>

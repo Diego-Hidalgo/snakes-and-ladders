@@ -12,14 +12,14 @@ public class Menu {
     private BufferedReader br;
     private BufferedWriter bw;
 
-    private final static int PLAY = 1;
-    private final static int SHOW_POSITIONS = 2;
-    private final static int EXIT = 3;
+    private static final int PLAY = 1;
+    private static final int SHOW_POSITIONS = 2;
+    private static final int EXIT = 3;
 
-    private final static String THROW_DICE_COMMAND = "";
-    private final static String NUM_COMMAND = "NUM";
-    private final static String SIMUL_COMMAND = "SIMUL";
-    private final static String MENU_COMMAND = "MENU";
+    private static final String THROW_DICE_COMMAND = "";
+    private static final String NUM_COMMAND = "NUM";
+    private static final String SIMUL_COMMAND = "SIMUL";
+    private static final String MENU_COMMAND = "MENU";
 
     private Board board;
 
@@ -53,7 +53,7 @@ public class Menu {
             String subPlayers = params.substring(8);
             passParameters(rows, columns, snakes, ladders, subPlayers);
         } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
-            bw.write("Por favor revise los par\\u00e1metros de juego.\n");
+            bw.write("Por favor revise los parametros de juego. \n\n");
             bw.flush();
         }//End try/catch
     }//End readParameters
@@ -86,7 +86,7 @@ public class Menu {
     }//End readCommandOperation
 
     public void restart() {
-        board = new Board();
+        board.reset();
     }//End restart
 
     public void play() throws IOException {
@@ -95,15 +95,20 @@ public class Menu {
         bw.flush();
         if(board.getGameStatus()) {
             bw.write("--- JUEGO TERMINADO ---\n");
-            bw.write(board.getWinnerInfo());
+            bw.write(board.getWinnerInfo() + "\n");
             bw.flush();
-            bw.write("Nickname: ");
-            String nickname = br.readLine();
-            board.addScore(nickname);
-            bw.write("\n");
-            bw.flush();
+            readWinnerInformation();
         }//End if
     }//End play
+
+    public void readWinnerInformation() throws IOException {
+        bw.write("Nickname: ");
+        bw.flush();
+        String nickname = br.readLine();
+        board.addScore(nickname);
+        bw.write("\n");
+        bw.flush();
+    }//End readWinnerinformation
 
    public void simulation() throws IOException {
         try {
@@ -158,8 +163,11 @@ public class Menu {
         }//End switch
     }//End doCommandOperation
 
-    public void showPositioningList() {
-        //To Do
+    public void showPositioningList() throws IOException {
+        bw.write("\n--- MOSTRANDO LISTA DE PUNTAJES ---");
+        bw.write("\n" + board.getScoresInString());
+        bw.write("--- LISTA TERMINADA ---\n\n");
+        bw.flush();
     }//End showPositioningList
 
     public void doOperation(int option) throws IOException{
