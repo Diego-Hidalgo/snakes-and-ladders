@@ -7,11 +7,16 @@ public class Board implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String BLUE ="\033[34m";
+    /*private static final String BLUE ="\033[34m";
     private static final String RED = "\033[31m";
     private static final String BOLD_FONT = "\033[0;1m";
-    private static final String RESET = "\u001B[0m";
-
+    private static final String RESET = "\u001B[0m";*/
+	
+	private static final String BLUE ="";
+    private static final String RED = "";
+    private static final String BOLD_FONT = "";
+    private static final String RESET = "";
+	
     private Score root;
     private Player firstPlayer;
     private Player winner;
@@ -436,7 +441,7 @@ public class Board implements Serializable {
 
 	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol,Random selector){
 		int select = selector.nextInt(2);
-    if( currentOccupation < maxOccupation && snakesAmount > 0 && select == 0  ){
+		if( currentOccupation < maxOccupation && snakesAmount > 0 && select == 0  ){
 			generateSnakes(snakesAmount,snakeSymbol);
 			currentOccupation += 1;
 			--snakesAmount;
@@ -447,7 +452,7 @@ public class Board implements Serializable {
 			--laddersAmount;
 			++ladderSymbol;
 		}//End else
-		if(currentOccupation < maxOccupation && (snakesAmount > 0 && laddersAmount > 0) )
+		if(currentOccupation < maxOccupation && (snakesAmount > 0 || laddersAmount > 0) )
 			generateSnakesAndLadders(snakesAmount,laddersAmount,snakeSymbol,ladderSymbol,selector);
 	}//End generateSnakesAndLadders
 
