@@ -143,6 +143,11 @@ public class Player implements Serializable {
       return position;
     }//End getPosition
 
+    /**
+     * gets the number of the square where the player is located.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the number of the square where the player is located represented by the total of rows times the total of columns. <br>
+     */
     public int getPositionNumber() {
         return position.getSquareNumber();
     }//End getPositionNumber
