@@ -17,8 +17,8 @@ public class Board implements Serializable {
     private Player winner;
     private Square firstSquare;
     private String board;
-    private int maxOcupation;
-    private int currentOcupation;
+    private int maxOccupation;
+    private int currentOccupation;
     private int columnsAmount;
     private int rowsAmount;
     private boolean gameStatus;
@@ -45,8 +45,8 @@ public class Board implements Serializable {
         winner = null;
         firstSquare = new Square(0, 0, 1);
         board = "";
-        maxOcupation = 0;
-        currentOcupation = 0;
+        maxOccupation = 0;
+        currentOccupation = 0;
         columnsAmount = 0;
         rowsAmount = 0;
         gameStatus = false;
@@ -170,8 +170,8 @@ public class Board implements Serializable {
     public void createBoard(int row,int col) {
       columnsAmount = col;
       rowsAmount = row;
-      maxOcupation = ((int) Math.floor(((row*col)-2)/2));
-      maxOcupation = maxOcupation - (int) Math.floor(col/2.0);
+      maxOccupation = ((int) Math.floor(((row*col)-2)/2));
+      maxOccupation = maxOccupation - (int) Math.floor(col/2.0);
       addColumns(firstSquare);
       addRows(firstSquare);
     }//End createBoard
@@ -445,19 +445,20 @@ public class Board implements Serializable {
 	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol){
 		Random selector = new Random();
 		int select = selector.nextInt(2);
-		if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
+		if( currentOccupation < maxOccupation && snakesAmount > 0 && select == 0  ){
 			generateSnakes(snakesAmount,snakeSymbol);
-			currentOcupation += 1;
+			currentOccupation += 1;
 			--snakesAmount;
 			++snakeSymbol;
-		}else if(currentOcupation < maxOcupation && laddersAmount > 0){
+		}else if(currentOccupation < maxOccupation && laddersAmount > 0){
 			generateLadders(laddersAmount,ladderSymbol);
-			currentOcupation += 1;
+			currentOccupation += 1;
 			--laddersAmount;
 			++ladderSymbol;
 		}//End else
-		if(currentOcupation < maxOcupation )
-			generateSnakesAndLadders(snakesAmount,laddersAmount,snakeSymbol,ladderSymbol);
+		if(currentOccupation < maxOccupation) {
+            generateSnakesAndLadders(snakesAmount, laddersAmount, snakeSymbol, ladderSymbol);
+        }//End if
 	}//End generateSnakesAndLadders
 
     /**
@@ -533,7 +534,7 @@ public class Board implements Serializable {
      * @param goal
      */
     public Square setSnakeHead(Square current,char symbol,int goal){
-      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
 				current.setSnake(String.valueOf(symbol));
         return current;
@@ -541,7 +542,7 @@ public class Board implements Serializable {
       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
        current.getLadderTop() != null || current.getLadderBot() != null) ){
         return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
-      }else if(current != null && currentOcupation < maxOcupation){
+      }else if(current != null && currentOccupation < maxOccupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getNext():current.getPrev();
         next = (next == null)?current.getDown():next;
         return setSnakeHead(next,symbol,goal);
@@ -559,7 +560,7 @@ public class Board implements Serializable {
      * @param head
      */
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
-      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null ){
 		    current.setSnake(String.valueOf(symbol));
         current.setSnakeHead(head);
@@ -570,7 +571,7 @@ public class Board implements Serializable {
         head = reLocatedHead(head,symbol);
 				int tailGoal = generateTailSquare(head.getSquareNumber());
 				setSnakeTail(firstSquare,symbol,tailGoal,head);
-      }else if(current != null && currentOcupation < maxOcupation){
+      }else if(current != null && currentOccupation < maxOccupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
         setSnakeTail(next,symbol,goal,head);
@@ -603,7 +604,7 @@ public class Board implements Serializable {
      * @param goal
      */
     public Square setLadderTop(Square current,int symbol,int goal){
-      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal
+      if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal
       && current.getSnakeHead() == null && current.getLadderTop() == null
       && current.getLadderBot() == null && current.getSnakeTail() == null){
 				current.setLadder(String.valueOf(symbol));
@@ -612,7 +613,7 @@ public class Board implements Serializable {
        (current.getSnakeHead() != null || current.getSnakeTail() != null ||
         current.getLadderTop() != null || current.getLadderBot() != null) ){
         return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
-      }else if(current != null && currentOcupation < maxOcupation){
+      }else if(current != null && currentOccupation < maxOccupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getNext():current.getPrev();
         next = (next == null)?current.getDown():next;
         return setLadderTop(next,symbol,goal);
@@ -630,7 +631,7 @@ public class Board implements Serializable {
      * @param head
      */
     public void setLadderBot(Square current,int symbol, int goal,Square head){
-      if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
+      if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null){
 		current.setLadder(String.valueOf(symbol));
         current.setLadderTop(head);
@@ -641,7 +642,7 @@ public class Board implements Serializable {
         head = reLocatedTop(head,symbol);
 				int botGoal = generateTailSquare(head.getSquareNumber());
         setLadderBot(firstSquare,symbol,botGoal,head);
-      }else if(current != null && currentOcupation < maxOcupation){
+      }else if(current != null && currentOccupation < maxOccupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
         setLadderBot(next,symbol,goal,head);
