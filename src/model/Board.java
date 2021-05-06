@@ -2,6 +2,7 @@ package model;
 
 import java.io.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Board implements Serializable {
 
@@ -105,7 +106,8 @@ public class Board implements Serializable {
     public void createBoard(int row,int col) {
       columnsAmount = col;
       rowsAmount = row;
-      maxOcupation = ((int) Math.floor(((row*col)-2)/2)) - 1;
+      maxOcupation = ((int) Math.floor(((row*col)-2)/2));
+      maxOcupation = maxOcupation - (int) Math.floor(col/2.0);
       addColumns(firstSquare);
       addRows(firstSquare);
     }//End createBoard
@@ -337,20 +339,20 @@ public class Board implements Serializable {
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
       && current.getLadderTop() == null && current.getLadderBot() == null && current.getSnakeTail() == null ){
-		current.setSnake(String.valueOf(symbol));
+		    current.setSnake(String.valueOf(symbol));
         current.setSnakeHead(head);
         head.setSnakeTail(current);
       }else if( current != null &&  current.getSquareNumber() == goal &&
       (current.getSnakeHead() != null || current.getSnakeTail() != null ||
        current.getLadderTop() != null || current.getLadderBot() != null) ){
-			 	head = reLocatedHead(head,symbol);
+        head = reLocatedHead(head,symbol);
 				int tailGoal = generateTailSquare(head.getSquareNumber());
 				setSnakeTail(firstSquare,symbol,tailGoal,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
         setSnakeTail(next,symbol,goal,head);
-      }
+      }//End else
     }//End setSnake
 
     public void generateLadders(int laddersAmount, int symbol){
@@ -390,14 +392,14 @@ public class Board implements Serializable {
       }else if(current != null &&  current.getSquareNumber() == goal &&
        (current.getSnakeHead() != null || current.getSnakeTail() != null ||
         current.getLadderTop() != null || current.getLadderBot() != null) ){
-				head = reLocatedTop(head,symbol);
+        head = reLocatedTop(head,symbol);
 				int botGoal = generateTailSquare(head.getSquareNumber());
         setLadderBot(firstSquare,symbol,botGoal,head);
       }else if(current != null && currentOcupation < maxOcupation){
         Square next = ( (current.getRow() + 1) % 2 == 0 )?current.getPrev():current.getNext();
         next = (next == null)?current.getDown():next;
         setLadderBot(next,symbol,goal,head);
-      }
+      }//End else
     }//End setLadderBot
 
     public void addScore(String name) {
@@ -453,5 +455,4 @@ public class Board implements Serializable {
         ObjectInputStream objectInputStream = new ObjectInputStream(bais);
         return objectInputStream.readObject();
     }//End deepClone
-
 }//End Board Class
