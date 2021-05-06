@@ -7,15 +7,10 @@ public class Board implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /*private static final String BLUE ="\033[34m";
+    private static final String BLUE ="\033[34m";
     private static final String RED = "\033[31m";
     private static final String BOLD_FONT = "\033[0;1m";
-    private static final String RESET = "\u001B[0m";*/
-	
-	private static final String BLUE ="";
-    private static final String RED = "";
-    private static final String BOLD_FONT = "";
-    private static final String RESET = "";
+    private static final String RESET = "\u001B[0m";
 	
     private Score root;
     private Player firstPlayer;

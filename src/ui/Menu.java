@@ -42,17 +42,17 @@ public class Menu {
     public void readParameters() throws IOException {
         bw.write("\nPar\u00e1metros de juego: ");
         bw.flush();
-        String params = br.readLine();
+        String[] params = br.readLine().split(" ");
         bw.write("\n");
         bw.flush();
         try {
-            int rows = Integer.parseInt(String.valueOf(params.charAt(0)));
-            int columns = Integer.parseInt(String.valueOf(params.charAt(2)));
-            int snakes = Integer.parseInt(String.valueOf(params.charAt(4)));
-            int ladders = Integer.parseInt(String.valueOf(params.charAt(6)));
-            String subPlayers = params.substring(8);
-            passParameters(rows, columns, snakes, ladders, subPlayers);
-        } catch (NumberFormatException | StringIndexOutOfBoundsException exception) {
+            int rows = Integer.parseInt(params[0]);
+            int columns = Integer.parseInt(params[1]);
+            int snakes = Integer.parseInt(params[2]);
+            int ladders = Integer.parseInt(params[3]);
+            String players = params[4];
+            passParameters(rows, columns, snakes, ladders, players);
+        } catch (NumberFormatException exception) {
             bw.write("Por favor revise los parametros de juego. \n\n");
             bw.flush();
         }//End try/catch
