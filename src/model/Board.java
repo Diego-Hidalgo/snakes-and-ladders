@@ -262,13 +262,13 @@ public class Board implements Serializable {
 
     public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
       char s = 65;
-	  generateSnakesAndLadders(snakesAmount,laddersAmount,s,1);
+      Random selector = new Random();
+	    generateSnakesAndLadders(snakesAmount,laddersAmount,s,1,selector);
     }//End generateSnakesAndLadders
 
-	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol){
-		Random selector = new Random();
+	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol,Random selector){
 		int select = selector.nextInt(2);
-		if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
+    if( currentOcupation < maxOcupation && snakesAmount > 0 && select == 0  ){
 			generateSnakes(snakesAmount,snakeSymbol);
 			currentOcupation += 1;
 			--snakesAmount;
@@ -279,8 +279,8 @@ public class Board implements Serializable {
 			--laddersAmount;
 			++ladderSymbol;
 		}//End else
-		if(currentOcupation < maxOcupation )
-			generateSnakesAndLadders(snakesAmount,laddersAmount,snakeSymbol,ladderSymbol);
+		if(currentOcupation < maxOcupation && (snakesAmount > 0 && laddersAmount > 0) )
+			generateSnakesAndLadders(snakesAmount,laddersAmount,snakeSymbol,ladderSymbol,selector);
 	}//End generateSnakesAndLadders
 
     public void generateSnakes(int snakesAmount, char symbol){
