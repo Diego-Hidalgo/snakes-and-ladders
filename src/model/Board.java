@@ -7,16 +7,12 @@ import java.util.Scanner;
 public class Board implements Serializable {
 
     private static final long serialVersionUID = 1L;
-		/*
+
     private static final String BLUE ="\033[34m";
     private static final String RED = "\033[31m";
     private static final String BOLD_FONT = "\033[0;1m";
     private static final String RESET = "\u001B[0m";
-*/
-	private static final String BLUE ="";
-	private static final String RED = "";
-	private static final String BOLD_FONT = "";
-	private static final String RESET = "";
+
     private Score root;
     private Player firstPlayer;
     private Player winner;
@@ -309,15 +305,15 @@ public class Board implements Serializable {
       return s;
     }//End generateTailSquare
 
-		public Square reLocatedHead(Square head,char symbol){
-			head.setSnake(null);
-			return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
-		}//End reLocatedHead
+    public Square reLocatedHead(Square head,char symbol){
+        head.setSnake(null);
+        return setSnakeHead(firstSquare.getDown(),symbol,generateHeadSquare());
+    }//End reLocatedHead
 
-		public Square reLocatedTop(Square head, int symbol){
-			head.setLadder(null);
-			return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
-		}//End reLocatedHead
+    public Square reLocatedTop(Square head, int symbol){
+        head.setLadder(null);
+        return setLadderTop(firstSquare.getDown(),symbol,generateHeadSquare());
+    }//End reLocatedHead
 
     public Square setSnakeHead(Square current,char symbol,int goal){
       if(current != null && currentOcupation < maxOcupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
