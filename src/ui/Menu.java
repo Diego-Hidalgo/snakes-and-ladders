@@ -61,15 +61,25 @@ public class Menu {
     public void passParameters(int rows, int columns, int snakes, int ladders, String subPlayers) throws IOException {
         try {
             int players = Integer.parseInt(subPlayers);
-            board.receiveGameParameters(rows, columns, snakes, ladders, players);
+            if(players <= 9) {
+                board.receiveGameParameters(rows, columns, snakes, ladders, players);
+                startGame();
+            } else {
+                bw.write("El número de jugadores a asingar no puede ser mayor a nueve\n\n");
+                bw.flush();
+            }//End if/else
         } catch (NumberFormatException nfe) {
             board.receiveGameParameters(rows, columns, snakes, ladders, subPlayers);
+            startGame();
         }//End try/catch
+    }//End readParameters
+
+    public void startGame() throws IOException {
         bw.write("--- JUEGO INICIADO ---\n");
         bw.write(board.getEnumeratedBoard() + "\n");
         bw.flush();
         readCommandOperation();
-    }//End readParameters
+    }//End startGame
 
     public void readCommandOperation() throws IOException {
         bw.write("Comando: ");
