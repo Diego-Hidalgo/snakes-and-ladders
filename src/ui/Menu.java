@@ -23,10 +23,10 @@ public class Menu {
 
     private Board board;
 
-    public Menu() {
+    public Menu(Board board) {
         br = new BufferedReader(new InputStreamReader(System.in));
         bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        board = new Board();
+        this.board = board;
     }//End constructor
 
     public void showMainMenu() throws IOException {
