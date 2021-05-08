@@ -106,8 +106,8 @@ public class Board implements Serializable {
      * receives the parameters of the current game and calls the methods that create the board, generate the snakes and ladders and adds the players.<br>
      *     <b>pre:</b> the object that calls the method is not null. Parameters are initialized. <br>
      *     <b>post:</b> a new board has been created and its ready to be used for the game. <br>
-     * @param rows the amount of rows of the board to be created. rows > 0.
-     * @param columns the amount of columns of the board to be created. columns > 0.
+     * @param rows the amount of rows of the board to be created. rows greater than 0.
+     * @param columns the amount of columns of the board to be created. columns greater than 0.
      * @param snakes the amount of snakes to place in the board.
      * @param ladders the amount of ladders to place in the board.
      * @param symbols the symbols of the players that are going ot play.
@@ -124,8 +124,8 @@ public class Board implements Serializable {
      * receives the parameters of the current game and calls the methods that create the board, generate the snakes and ladders and adds the players.<br>
      *     <b>pre:</b> the object that calls the method is not null. the parameters are initialized. <br>
      *     <b>post:</b> a new board has been created and it's ready to be used for the game. <br>
-     * @param rows the amount of rows of the board to be created. rows > 0
-     * @param columns the amount of columns of the board to be created. columns > 0
+     * @param rows the amount of rows of the board to be created. rows greater than 0
+     * @param columns the amount of columns of the board to be created. columns greater than 0
      * @param snakes the amount of snakes to place in the board.
      * @param ladders the amount of ladders to place in the board.
      * @param amountPlayers the amount of players to place in the board.
@@ -164,8 +164,8 @@ public class Board implements Serializable {
      * creates a new board. A linked list of Square objects<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> a new linked list of squares hat represents the board has been created. <br>
-     * @param row the amount of rows of the new board. row > 0
-     * @param col the amount of columns of the new board. col > 0
+     * @param row the amount of rows of the new board. row greater than 0
+     * @param col the amount of columns of the new board. col greater than 0
      */
     public void createBoard(int row,int col) {
       columnsAmount = col;
@@ -280,7 +280,7 @@ public class Board implements Serializable {
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> all the players have been added. <br>
      * @param symbols all the symbols of the players to be added in a String.
-     * @param index an auxiliar used to stop the recursive call to the method. index >= 0
+     * @param index an auxiliar used to stop the recursive call to the method. index greater or equal to 0
      */
     public void addAllPlayers(String symbols, int index) {
         if(index < symbols.length()) {
@@ -316,7 +316,7 @@ public class Board implements Serializable {
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the player has been moved in the board. <br>
      * @param symbol the symbol of the player to be moved. the symbol is currently being used by a player
-     * @param steps the amount of steps to move the player. steps > 0
+     * @param steps the amount of steps to move the player. steps greater than 0
      */
     public boolean movePlayer(String symbol, int steps) {
       Player toMove = searchPlayer(symbol,firstPlayer);
@@ -425,8 +425,8 @@ public class Board implements Serializable {
      * calls the method the method that generates the snakes and ladders passing as parameters the initial values.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the snakes and ladders have been successfully added to the board.
-     * @param snakesAmount the amount of snakes to place in the board. snakeAmount > 0
-     * @param laddersAmount the amount of ladders to place in the board. laddersAmount > 0
+     * @param snakesAmount the amount of snakes to place in the board. snakeAmount greater than 0
+     * @param laddersAmount the amount of ladders to place in the board. laddersAmount greater than 0
      */
     public void generateSnakesAndLadders(int snakesAmount,int laddersAmount){
       char s = 65;
@@ -465,7 +465,7 @@ public class Board implements Serializable {
      * generates the head and tail of a snake in a random square with the given symbol. the tail and the head will be linked.<br>
      *     <b>pre:</b> the snakes and ladders have been successfully added to the board.
      *     <b>post:</b> the snakes have been successfully added. <br>
-     * @param snakesAmount the amount of snakes to add. snakesAmount >= 0
+     * @param snakesAmount the amount of snakes to add. snakesAmount greater or equal to 0
      * @param symbol the symbol to use for the head and tail.
      */
     public void generateSnakes(int snakesAmount, char symbol){
@@ -582,7 +582,7 @@ public class Board implements Serializable {
      * calls the methods tha generates both the head an bottom of a ladder.<br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the ladders have been successfully added. <br>
-     * @param laddersAmount the amount of ladders to be added. laddersAmount >= 0
+     * @param laddersAmount the amount of ladders to be added. laddersAmount greater or equal to 0
      * @param symbol the symbol to be used for the generated ladders.
      */
     public void generateLadders(int laddersAmount, int symbol){

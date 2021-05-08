@@ -29,8 +29,8 @@ public class Square implements Serializable {
      * Constructor of the Square class. <br>
      *     <b>pre:</b> the parameters are initialized. <br>
      *     <b>post:</b> a new Square object has been created. <br>
-     * @param row the row where the square is placed in the board. row > 0
-     * @param column the column where the square is placed in the board. column > 0
+     * @param row the row where the square is placed in the board. row greater than 0
+     * @param column the column where the square is placed in the board. column greater than 0
      * @param squareNumber the number of the squared in the board. It's given by row * column.
      */
     public Square(int row, int column,int squareNumber) {
@@ -294,7 +294,7 @@ public class Square implements Serializable {
      * puts the symbols of the current players in the square in a String.<br>
      *     <b>pre:</b> the variable where the symbols will be putted has been initialized. <br>
      *     <b>post:</b> puts the symbols of the current players in a String. <br>
-     * @param current
+     * @param current the current players being used.
      */
     private void currentPlayers(Player current){
       if(current != null){
@@ -306,7 +306,7 @@ public class Square implements Serializable {
     /**
      * changes the end (head) of a snake represented by a Square object.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the head of the snake has been changed. <br>
+     *     <b>post:</b> the head of the snake has been changed. <br>
      * @param head the new head of the snake.
      */
     public void setSnakeHead(Square head){
@@ -316,7 +316,7 @@ public class Square implements Serializable {
     /**
      * changes the start (tail) of a snake represented by a Square object.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the tail of the snake has been changed. <br>
+     *     <b>post:</b> the tail of the snake has been changed. <br>
      * @param tail the new tail of the snake.
      */
     public void setSnakeTail(Square tail){
@@ -326,7 +326,7 @@ public class Square implements Serializable {
     /**
      * returns the end of a snake (head) represented by a Square object. <br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the head of the snake. <br>
+     *     <b>post:</b> the head of the snake. <br>
      */
     public Square getSnakeHead(){
       return snakeHead;
@@ -335,7 +335,7 @@ public class Square implements Serializable {
     /**
      * returns the start of a snake (tail) represented by a Square object.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the tail of the snake. <br>
+     *     <b>post:</b> the tail of the snake. <br>
      */
     public Square getSnakeTail(){
       return snakeTail;
@@ -344,7 +344,7 @@ public class Square implements Serializable {
     /**
      * changes the end of a ladder (top) represented by a Square object. <br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the top of the ladder has been changed. <br>
+     *     <b>post:</b> the top of the ladder has been changed. <br>
      * @param top the new top of the ladder.
      */
     public void setLadderTop(Square top){
@@ -354,7 +354,7 @@ public class Square implements Serializable {
     /**
      * changes the start of a ladder (bottom) represented by a Square object.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/>
+     *     <b>post:</b>
      * @param bot the new bottom of the ladder.
      */
     public void setLadderBot(Square bot){
@@ -364,7 +364,7 @@ public class Square implements Serializable {
     /**
      * returns the top of the ladder in the current Square.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the top of the ladder of the current Square. <br>
+     *     <b>post:</b> the top of the ladder of the current Square. <br>
      */
     public Square getLadderTop(){
       return ladderTop;
@@ -373,7 +373,7 @@ public class Square implements Serializable {
     /**
      * returns the bottom of the ladder in the current Square.<br>
      *     <b>pre</b> the object that calls the method is not null. <br>
-     *     <b>post:<b/> the bottom of the ladder of the current Square. <br>
+     *     <b>post:</b> the bottom of the ladder of the current Square. <br>
      */
     public Square getLadderBot(){
       return ladderBot;

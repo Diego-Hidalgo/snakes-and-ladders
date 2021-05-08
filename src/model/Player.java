@@ -71,7 +71,7 @@ public class Player implements Serializable {
      * changes the amount of movements made by the player represented by the times the player has rolled the dice. <br>
      *     <b>pre:</b> the object that calls the method is not null. <br>
      *     <b>post:</b> the amount of movements has been changed. <br>
-     * @param movements the new amount of movements made by the player. movements >= 0.
+     * @param movements the new amount of movements made by the player. movements greater or equal to 0.
      */
     public void setMovements(int movements) {
         this.movements = movements;
