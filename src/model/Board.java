@@ -502,11 +502,11 @@ public class Board implements Serializable {
     }//End generateTailSquare
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param head
-     * @param symbol
+     * relocates a snake in case there is no space to place it in the board.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the head has been relocated. <br>
+     * @param head the square to be relocated.
+     * @param symbol the symbol to use for the new snake.
      */
     public Square reLocatedHead(Square head,char symbol){
         head.setSnake(null);
@@ -514,11 +514,11 @@ public class Board implements Serializable {
     }//End reLocatedHead
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param head
-     * @param symbol
+     * relocates a ladder in case there is no space to place it in the board.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the top has been relocated. <br>
+     * @param head the square to be relocated.
+     * @param symbol the symbol to use for the new ladder.
      */
     public Square reLocatedTop(Square head, int symbol){
         head.setLadder(null);
