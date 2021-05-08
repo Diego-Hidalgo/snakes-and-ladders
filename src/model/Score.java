@@ -144,9 +144,9 @@ public class Score {
      *     <b>post:</b> returns the name of the player, the score and the game parameters in a String. <br>
      */
     public String toString() {
-        String msg = "Nickname: " + player.getName() + "\n";
+        String msg = "\nNickname: " + player.getName() + "\n";
         msg += "Puntaje: " + getScore() + "\n";
-        msg += "Parametros de juego: " + getParameters() + "\n";
+        msg += "Parametros de juego: " + getParameters() + "\n\n";
         return msg;
     }//End toString
 

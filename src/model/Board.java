@@ -712,7 +712,7 @@ public class Board implements Serializable {
      */
     public String getScoresInString() {
         if(root == null) {
-            return "\nNo hay puntuaciones por mostrar \n";
+            return "\nNo hay puntuaciones por mostrar \n\n";
         } else {
             return getScoresInString(root);
         }//End if/else
