@@ -204,7 +204,7 @@ public class Menu {
             option = readOption();
             doOperation(option);
         } catch(NumberFormatException nfe) {
-            bw.write("\n...\nLa entrada no es un número\n...\n\n");
+            bw.write("\n...\nLa entrada debe ser un número\n...\n\n");
             bw.flush();
         }//End try/catch
         if(option != 3) {
