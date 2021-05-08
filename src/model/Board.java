@@ -133,7 +133,7 @@ public class Board implements Serializable {
     public void receiveGameParameters(int rows, int columns, int snakes, int ladders, int amountPlayers) {
         String availableSymbols = "*!OX%$#+&";
         String symbols = availableSymbols.substring(0, amountPlayers);
-        String params = rows + " " + columns + " " + snakes + " " + ladders + " " + symbols;
+        String params = rows + " " + columns + " " + snakes + " " + ladders + " " + amountPlayers;
         setGameParameters(params);
         createBoard(rows, columns);
         generateSnakesAndLadders(snakes, ladders);
