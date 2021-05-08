@@ -434,6 +434,16 @@ public class Board implements Serializable {
 	    generateSnakesAndLadders(snakesAmount,laddersAmount,s,1,selector);
     }//End generateSnakesAndLadders
 
+    /**
+     * calls the methods that generates the snakes and the ladders in the squares of the board.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the snakes and ladders have been successfully added to the board. <br>
+     * @param snakesAmount the amount of snakes to add. snakesAmount >= 0
+     * @param laddersAmount the amount of ladders to add. laddersAmount >= 0
+     * @param snakeSymbol the symbol of the snake to use.
+     * @param ladderSymbol the symbol of the ladder to use.
+     * @param selector a rondom number given by selector.nextInt(). helps with the addition of new elements.
+     */
 	private void generateSnakesAndLadders(int snakesAmount,int laddersAmount,char snakeSymbol,int ladderSymbol,Random selector){
 		int select = selector.nextInt(2);
 		if( currentOccupation < maxOccupation && snakesAmount > 0 && select == 0  ){
@@ -452,11 +462,11 @@ public class Board implements Serializable {
 	}//End generateSnakesAndLadders
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param snakesAmount
-     * @param symbol
+     * generates the head and tail of a snake in a random square with the given symbol. the tail and the head will be linked.<br>
+     *     <b>pre:</b> the snakes and ladders have been successfully added to the board.
+     *     <b>post:</b> the snakes have been successfully added. <br>
+     * @param snakesAmount the amount of snakes to add. snakesAmount >= 0
+     * @param symbol the symbol to use for the head and tail.
      */
     public void generateSnakes(int snakesAmount, char symbol){
       if(snakesAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
@@ -469,9 +479,9 @@ public class Board implements Serializable {
     }//End generateSnakes
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
+     * returns a random number that will be used to place a element as head.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> a number of square where an element will be placed. <br>
      */
     private int generateHeadSquare(){
       Random selector = new Random();
@@ -479,10 +489,10 @@ public class Board implements Serializable {
     }//End generateHeadSquare
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param squareHeadNumber
+     * returns a random number that will be used to place a element as a tail.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> a number of a square where an element will be placed. <br>
+     * @param squareHeadNumber the number of the square that is being used as head.
      */
     private int generateTailSquare(int squareHeadNumber){
       int r = (int) Math.ceil(squareHeadNumber/((double)columnsAmount));
@@ -516,12 +526,12 @@ public class Board implements Serializable {
     }//End reLocatedHead
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param symbol
-     * @param goal
+     * sets the head of a snake in a square.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the head of the snake has been successfully added. <br>
+     * @param current the current square being used in the linked list
+     * @param symbol the symbol to use for the snake to be added.
+     * @param goal the number of the square to place the element.
      */
     public Square setSnakeHead(Square current,char symbol,int goal){
       if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
@@ -541,13 +551,13 @@ public class Board implements Serializable {
     }//End setSnake
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param symbol
-     * @param goal
-     * @param head
+     * sets the tail of a snake in a square of the board.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the tail of the snake has been successfully added. <br>
+     * @param current the current square being used in the linked list.
+     * @param symbol the symbol to use for the snake that will be added.
+     * @param goal the number of the square to place the element.
+     * @param head the head of the snake that will be linked to the added tail
      */
     public void setSnakeTail(Square current,char symbol, int goal,Square head){
       if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
@@ -569,11 +579,11 @@ public class Board implements Serializable {
     }//End setSnake
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param laddersAmount
-     * @param symbol
+     * calls the methods tha generates both the head an bottom of a ladder.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the ladders have been successfully added. <br>
+     * @param laddersAmount the amount of ladders to be added. laddersAmount >= 0
+     * @param symbol the symbol to be used for the generated ladders.
      */
     public void generateLadders(int laddersAmount, int symbol){
       if(laddersAmount > 0 && rowsAmount > 1){ //rowsAmount columnsAmount
@@ -586,12 +596,12 @@ public class Board implements Serializable {
     }//End generateLadders
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param symbol
-     * @param goal
+     * Adds the top of a square in the board. This top will be used by the ladders.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the top ladder has been successfully added. <br>
+     * @param current the current Square being used in the linked list
+     * @param symbol the symbol to be used by the ladder to add.
+     * @param goal the number of the square to place the element.
      */
     public Square setLadderTop(Square current,int symbol,int goal){
       if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal
@@ -612,13 +622,13 @@ public class Board implements Serializable {
     }//End setLadderTop
 
     /**
-     * <br>
-     *     <b>pre:</b>
-     *     <b>post:</b>
-     * @param current
-     * @param symbol
-     * @param goal
-     * @param head
+     * Adds the bottom of a square in the board. This bottom is used by the ladders.<br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the bottom ladder has been successfully added. <br>
+     * @param current the current square being used in the linked list.
+     * @param symbol the symbol to use for the ladder.
+     * @param goal the number of the square to place the element
+     * @param head the head that is linked to the bottom of the ladder to add.
      */
     public void setLadderBot(Square current,int symbol, int goal,Square head){
       if(current != null && currentOccupation < maxOccupation && current.getSquareNumber() == goal && current.getSnakeHead() == null
