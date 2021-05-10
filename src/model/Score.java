@@ -5,6 +5,7 @@ public class Score {
     private Player player;
     private int score;
     private String parameters;
+    private String allPlayersSymbols;
 
     private Score parent;
     private Score right;
@@ -17,11 +18,13 @@ public class Score {
      * @param player the player with the current score.
      * @param score the value of the score.
      * @param parameters the game parameters that were used to play.
+     * @param allPlayersSymbols the symbols that were used by al the players of the game.
      */
-    public Score(Player player, int score, String parameters) {
+    public Score(Player player, int score, String parameters, String allPlayersSymbols) {
         this.player = player;
         this.score = score;
         this.parameters = parameters;
+        this.allPlayersSymbols = allPlayersSymbols;
     }//End Constructor
 
     /**
@@ -80,6 +83,25 @@ public class Score {
     public String getParameters() {
         return parameters;
     }//End getParameters
+
+    /**
+     * changes the symbols that were used by all the players in a game. <br>
+     *     <b>pre:</b> the object that calls the method is not null. <br>
+     *     <b>post:</b> the symbols used by all the players of the game have been changed. <br>
+     * @param allPlayersSymbols the new symbols used by all the players.
+     */
+    public void setAllPlayersSymbols(String allPlayersSymbols) {
+        this.allPlayersSymbols = allPlayersSymbols;
+    }//End setAllPlayersSymbols
+
+    /**
+     * returns the symbols used by all the players used in a game. <br>
+     *     <b>pre:</b> the object that calls this method is not null. <br>
+     *     <b>post:</b> the symbols used by all the players in a game. <br>
+     */
+    public String getAllPlayersSymbols() {
+        return allPlayersSymbols;
+    }//End getAllPlayersSymbols
 
     /**
      * changes the parent of the current node in the binary search tree.<br>
@@ -145,6 +167,8 @@ public class Score {
      */
     public String toString() {
         String msg = "\nNickname: " + player.getName() + "\n";
+        msg += "Simbolo: " + player.getSymbol() + "\n";
+        msg += "Todos los simbolos: " + getAllPlayersSymbols() + "\n";
         msg += "Puntaje: " + getScore() + "\n";
         msg += "Parametros de juego: " + getParameters() + "\n\n";
         return msg;

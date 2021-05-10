@@ -658,7 +658,7 @@ public class Board implements Serializable {
     public void addScore(String name) {
         winner.setName(name);
         int value = winner.getMovements() * columnsAmount * rowsAmount;
-        Score toAdd = new Score(winner, value, getGameParameters());
+        Score toAdd = new Score(winner, value, getGameParameters(), getAllPlayersSymbols());
         if(root == null) {
             root = toAdd;
         } else {
@@ -731,6 +731,29 @@ public class Board implements Serializable {
             return getScoresInString(1, root);
         }//End if/else
     }//End getScoresInString
+
+    /**
+     * calls the method that gets the symbols used by all the players in a game passing the firstPlayer of the linked list. <br>
+     *     <b>pre:</b> the object that calls this method is not null. the first player is not null and its a circular linked list. <br>
+     *     <b>post:</b> returns the symbols used by all the players in the game given by the called method. <br>
+     */
+    private String getAllPlayersSymbols() {
+        return getAllPlayersSymbols(firstPlayer);
+    }//End getAllPlayersSymbols
+
+    /**
+     * Adds the symbols used by all the players in a game in a String and returns it. <br>
+     *     <b>pre:</b> the object that calls this method is not null. <br>
+     *     <b>post:</b> the symbols used by all the players in the game in a String. <br>
+     * @param current the current players used to visit the nodes in the linked list of players.
+     */
+    public String getAllPlayersSymbols(Player current) {
+        String msg = current.getSymbol();
+        if(current.getNext() != firstPlayer) {
+            msg += getAllPlayersSymbols(current.getNext());
+        }//End if
+        return msg;
+    }//End getAllPlayersSymbols
 
     /**
      * makes a deep clone of the current Board object using serialization.<br>
