@@ -695,12 +695,14 @@ public class Board implements Serializable {
      *     <b>post:</b> the information of the previous played gamed .<br>
      * @param current the current node that is being visited inorder in the tree structure.
      */
-    private String getScoresInString(Score current) {
+    private String getScoresInString(int count, Score current) {
         String info = "";
         if(current != null) {
-            info += current.toString();
-            info += getScoresInString(current.getLeft());
-            info += getScoresInString(current.getRight());
+            info += "["+ count + "]" + current.toString();
+            if(current.getLeft() != null)
+                info += getScoresInString(++count, current.getLeft());
+            if(current.getRight() != null)
+                info += getScoresInString(++count, current.getRight());
         }//End if
         return info;
     }//End getScoresInString
@@ -714,7 +716,7 @@ public class Board implements Serializable {
         if(root == null) {
             return "\nNo hay puntuaciones por mostrar \n\n";
         } else {
-            return getScoresInString(root);
+            return getScoresInString(1, root);
         }//End if/else
     }//End getScoresInString
 
