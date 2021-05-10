@@ -674,7 +674,7 @@ public class Board implements Serializable {
      * @param toAdd the new score to add to the binary search tree.
      */
     private void addScore(Score current, Score toAdd) {
-        if(current.getScore() > toAdd.getScore()) {
+        if(reverseScore(toAdd.getScore()) >= reverseScore(current.getScore())) {
             if(current.getRight() == null) {
                 current.setRight(toAdd);
             } else {
@@ -688,6 +688,12 @@ public class Board implements Serializable {
             }//End if/else
         }//End if/else
     }//End addScore
+
+    private int reverseScore(int score) {
+        String scoreString = String.valueOf(score);
+        StringBuilder sb = new StringBuilder(scoreString);
+        return Integer.parseInt(sb.reverse().toString());
+    }//End reverseScore
 
     /**
      * returns the saved information of the scores of previous played games. Traverses the binary search tree inorder.<br>
