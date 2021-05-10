@@ -689,6 +689,12 @@ public class Board implements Serializable {
         }//End if/else
     }//End addScore
 
+    /**
+     * reverses a given score using the method reverse in the StringBuilder class. <br>
+     *     <b>pre:</b> the object that calls this method is not null. <br>
+     *     <b>post:</b> the given score has been reversed. <br>
+     * @param score the score to be reversed.
+     */
     private int reverseScore(int score) {
         String scoreString = String.valueOf(score);
         StringBuilder sb = new StringBuilder(scoreString);
